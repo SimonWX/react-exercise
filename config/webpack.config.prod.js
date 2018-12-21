@@ -51,10 +51,12 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 const useTypeScript = fs.existsSync(paths.appTsConfig);
 
 // style files regexes
-const cssRegex = /\.(css|less)$/;
-const cssModuleRegex = /\.module\.(css|less)$/;
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -91,17 +93,38 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         sourceMap: shouldUseSourceMap,
       },
     },
-    {
-      loader: require.resolve('less-loader')
-    }
+    // {
+    //   loader: require.resolve('less-loader'),
+    //   options: {
+    //     modules: false,
+    //     modifyVars: {
+    //       'primary-color':'#f9c700'
+    //     }
+    //   }
+    // }
   ];
   if (preProcessor) {
-    loaders.push({
+    // loaders.push({
+    //   loader: require.resolve(preProcessor),
+    //   options: {
+    //     sourceMap: shouldUseSourceMap,
+    //   },
+    // });
+    let loader = {
       loader: require.resolve(preProcessor),
       options: {
         sourceMap: shouldUseSourceMap,
       },
-    });
+    }
+    if (preProcessor === "less-loader") {
+      loader.options.modifyVars = {
+        'primary-color': '#f9c700',
+        'link-color': '#1DA57A',
+        'border-radius-base': '2px',
+      }
+      loader.options.javascriptEnabled = true
+    }
+    loaders.push(loader);
   }
   return loaders;
 };
@@ -270,6 +293,26 @@ module.exports = {
         ],
         include: paths.appSrc,
       },
+      // {
+      //   test: /\.less$/,
+      //       //include: paths.appSrc,
+      //       use: [{
+      //           loader: "style-loader" // creates style nodes from JS strings
+      //       }, {
+      //           loader: "css-loader" // translates CSS into CommonJS
+      //       }, {
+      //           loader: "less-loader",// compiles Less to CSS
+      //           options: {
+      //               sourceMap: true,
+      //               modifyVars: {
+      //                   'primary-color': '#1DA57A',
+      //                   'link-color': '#1DA57A',
+      //                   'border-radius-base': '2px',
+      //               },
+      //               javascriptEnabled: true,
+      //           }
+      //       }]
+      // },
       {
         // "oneOf" will traverse all following loaders until one will
         // match the requirements. When no loader matches it will fall
@@ -290,19 +333,18 @@ module.exports = {
           {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
             include: paths.appSrc,
-
             loader: require.resolve('babel-loader'),
             options: {
-              plugins: [
-                ['import',[{
-                  libraryName: 'antd',
-                  style: true
-                }]]
-              ],
               customize: require.resolve(
                 'babel-preset-react-app/webpack-overrides'
               ),
-              
+              plugins: [
+                ['import',[{
+                  libraryName: 'antd',
+                  libraryDirectory:'es',
+                  style: true
+                }]]
+              ],
               plugins: [
                 [
                   require.resolve('babel-plugin-named-asset-import'),
@@ -412,6 +454,23 @@ module.exports = {
               'sass-loader'
             ),
           },
+          // "postcss" loader applies autoprefixer to our LESS.
+          {
+            test: lessRegex,
+            exclude: lessModuleRegex,
+            use: getStyleLoaders({
+              importLoaders: 3,
+            }, 'less-loader'),
+          },
+          // Adds support for LESS Modules 
+          {
+            test: lessModuleRegex,
+            use: getStyleLoaders({
+              importLoaders: 3,
+              modules: true,
+              getLocalIdent: getCSSModuleLocalIdent,
+            }, 'less-loader'),
+          },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader doesn't use a "test" so it will catch all modules
@@ -422,7 +481,7 @@ module.exports = {
             // it's runtime that would otherwise be processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|mjs|jsx|ts|tsx)$/,/\.less$/, /\.html$/, /\.json$/],
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
             },

@@ -68,18 +68,32 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         ],
       },
     },
-    {
-      loader: require.resolve('less-loader'),
-      options: {
-        modules: false,
-        modifyVars: {
-          'primary-color':'#f9c700'
+    // {
+    //   loader: require.resolve('less-loader'),
+    //   options: {
+    //     modules: false,
+    //     modifyVars: {
+    //       'primary-color':'#f9c700'
+    //     }
+    //   }
+    // }
+  ];
+  if (preProcessor) {
+    let loader = require.resolve(preProcessor)
+    if (preProcessor === "less-loader") {
+      loader = {
+        loader,
+        options: {
+          modifyVars: {
+            'primary-color': '#f9c700',
+            'link-color': '#1DA57A',
+            'border-radius-base': '2px',
+          },
+          javascriptEnabled: true,
         }
       }
     }
-  ];
-  if (preProcessor) {
-    loaders.push(require.resolve(preProcessor));
+    loaders.push(loader);
   }
   return loaders;
 };
@@ -306,18 +320,20 @@ module.exports = {
           {
             test: lessRegex,
             exclude: lessModuleRegex,
-            use: getStyleLoaders({
-              importLoaders: 2,
-            }, 'less-loader'),
+            use: getStyleLoaders({ importLoaders: 3 }, 'less-loader'),
           },
-          // Adds support for LESS Modules 
+          // Adds support for CSS Modules, but using SASS
+          // using the extension .module.scss or .module.sass
           {
             test: lessModuleRegex,
-            use: getStyleLoaders({
-              importLoaders: 2,
-              modules: true,
-              getLocalIdent: getCSSModuleLocalIdent,
-            }, 'less-loader'),
+            use: getStyleLoaders(
+              {
+                importLoaders: 3,
+                modules: true,
+                getLocalIdent: getCSSModuleLocalIdent,
+              },
+              'less-loader'
+            ),
           },
           // Opt-in support for SASS (using .scss or .sass extensions).
           // Chains the sass-loader with the css-loader and the style-loader
