@@ -61,7 +61,7 @@ class FormRegister extends React.Component{
         }
         return (
             <div>
-                <Card title="注册表单 hohoho~">
+                <Card title="注册表单 error~">
                     <Form layout="horizontal">
                         <FormItem label="用户名 xixixi" {...formItemLayout}>
                             {
