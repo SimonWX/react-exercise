@@ -70,7 +70,7 @@ class FormRegister extends React.Component{
                                     rules: [
                                         {
                                             required: true,
-                                            messgae:'用户名不能为空！'
+                                            messgae:'用户名不能为空 haha！'
                                         }
                                     ]
                                 })(
