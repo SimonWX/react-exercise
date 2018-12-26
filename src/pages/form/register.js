@@ -61,9 +61,9 @@ class FormRegister extends React.Component{
         }
         return (
             <div>
-                <Card title="注册表单 error~">
+                <Card title="注册表单">
                     <Form layout="horizontal">
-                        <FormItem label="用户名 xixixi" {...formItemLayout}>
+                        <FormItem label="用户名" {...formItemLayout}>
                             {
                                 getFieldDecorator('userName',{
                                     initialValue: '',
@@ -74,7 +74,7 @@ class FormRegister extends React.Component{
                                         }
                                     ]
                                 })(
-                                    <Input placeholder="请输入用户名xuhao"/>
+                                    <Input placeholder="请输入用户名"/>
                                 )
                             }
                         </FormItem>
@@ -85,7 +85,7 @@ class FormRegister extends React.Component{
                                     rules: [
                                         {
                                             required: true,
-                                            messgae:'密码不能为空空如也！'
+                                            messgae:'密码不能为空！'
                                         }
                                     ]
                                 })(
