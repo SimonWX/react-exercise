@@ -85,7 +85,7 @@ class FormRegister extends React.Component{
                                     rules: [
                                         {
                                             required: true,
-                                            messgae:'密码不能为空！'
+                                            messgae:'密码不能为空空如也！'
                                         }
                                     ]
                                 })(
