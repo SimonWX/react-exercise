@@ -67,16 +67,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
           }),
         ],
       },
-    },
-    // {
-    //   loader: require.resolve('less-loader'),
-    //   options: {
-    //     modules: false,
-    //     modifyVars: {
-    //       'primary-color':'#f9c700'
-    //     }
-    //   }
-    // }
+    }
   ];
   if (preProcessor) {
     let loader = require.resolve(preProcessor)
@@ -85,7 +76,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         loader,
         options: {
           modifyVars: {
-            'primary-color': '#f9c700',
+            'primary-color': '#24b95f',
             'link-color': '#1DA57A',
             'border-radius-base': '2px',
           },
