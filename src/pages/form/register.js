@@ -63,7 +63,7 @@ class FormRegister extends React.Component{
             <div>
                 <Card title="注册表单 hohoho~">
                     <Form layout="horizontal">
-                        <FormItem label="用户名" {...formItemLayout}>
+                        <FormItem label="用户名 xixixi" {...formItemLayout}>
                             {
                                 getFieldDecorator('userName',{
                                     initialValue: '',
