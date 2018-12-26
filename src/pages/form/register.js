@@ -30,8 +30,9 @@ class FormRegister extends React.Component{
     }
 
     handleSubmit = () => {
-        let userInfo = this.props.form.getFieldValue();
+        let userInfo = this.props.form.getFieldsValue();
         console.log(JSON.stringify(userInfo))
+        message.success(`${userInfo.userName}恭喜你，通过本次表单组件学习，当前密码是：${userInfo.userPwd}`)
     }
     
     render(){
@@ -56,8 +57,8 @@ class FormRegister extends React.Component{
             }
         }
         const rowObjects = {
-            minRows:2,
-            maxRows:4
+            minRows:4,
+            maxRows:6
         }
         return (
             <div>
@@ -81,13 +82,7 @@ class FormRegister extends React.Component{
                         <FormItem label="密码" {...formItemLayout}>
                             {
                                 getFieldDecorator('userPwd',{
-                                    initialValue: '',
-                                    rules: [
-                                        {
-                                            required: true,
-                                            messgae:'密码不能为空！'
-                                        }
-                                    ]
+                                    initialValue: ''
                                 })(
                                     <Input type="password" placeholder="请输入密码"/>
                                 )
@@ -117,9 +112,9 @@ class FormRegister extends React.Component{
                         <FormItem label="当前状态" {...formItemLayout}>
                             {
                                 getFieldDecorator('state',{
-                                    initialValue: ['1']
+                                    initialValue: '1'
                                 })(
-                                    <Select mode="multiple">
+                                    <Select>
                                         <Option value="1">咸鱼一条</Option>
                                         <Option value="2">风华浪子</Option>
                                         <Option value="3">北大才子</Option>
@@ -194,7 +189,7 @@ class FormRegister extends React.Component{
                                     <Upload
                                         listType="picture-card"
                                         showUploadList={false}
-                                        action="//jsonplaceholder.typicode.com/posts"
+                                        action="//jsonplaceholder.typicode.com/posts/"
                                         onChange={this.handleChange}
                                     >
                                     {this.state.userImg?<img src={this.state.userImg}/>:<Icon type="plus"/>}
@@ -205,7 +200,7 @@ class FormRegister extends React.Component{
                         <FormItem  {...offsetLayout}>
                             {
                                 getFieldDecorator('userProtal')(
-                                    <Checkbox>我已经阅读过<a href="#">慕课网协议</a></Checkbox>
+                                    <Checkbox>我已经阅读过<a href="#">《慕课网协议》</a></Checkbox>
                                 )
                             }
                         </FormItem>
