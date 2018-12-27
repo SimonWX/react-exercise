@@ -32,7 +32,7 @@ class FormRegister extends React.Component{
     handleSubmit = () => {
         let userInfo = this.props.form.getFieldsValue();
         console.log(JSON.stringify(userInfo))
-        message.success(`${userInfo.userName}恭喜蓝雨，通过本次表单组件学习，当前密码是：${userInfo.userPwd}`)
+        message.success(`${userInfo.userName}恭喜蓝雨许浩，通过本次表单组件学习，当前密码是：${userInfo.userPwd}`)
     }
     
     render(){
