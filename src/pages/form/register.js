@@ -125,7 +125,7 @@ class FormRegister extends React.Component{
                         </FormItem>
                         <FormItem label="爱好" {...formItemLayout}>
                             {
-                                getFieldDecorator('interst',{
+                                getFieldDecorator('interest',{
                                     initialValue: ['1','2']
                                 })(
                                     <Select mode="multiple">
