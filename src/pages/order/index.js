@@ -5,7 +5,9 @@ import Utils from '../../utils/utils'
 const FormItem = Form.Item;
 const Option = Select.Option;
 export default class Order extends React.Component{
-  state = {}
+  state = {
+
+  }
   params = {
     page: 1
   }
@@ -18,9 +20,7 @@ export default class Order extends React.Component{
     axios.ajax({
       url: '/order/list',
       data: {
-        params:{
-          page: this.params.page
-        }
+        params: this.params
       }
     }).then((res)=>{
       let list = res.result.item_list.map((item, index)=>{
@@ -35,6 +35,53 @@ export default class Order extends React.Component{
         })
       })
     })
+  }
+
+  onRowClick = (record, index)=>{
+    let selectKey = [index];
+    this.setState({
+      selectedRowKeys: selectKey,
+      selectedItem: record
+    })
+  }
+
+  openOrderDetail = ()=>{
+    let item = this.state.selectedItem;
+    if(!item){
+      Modal.info({
+        title: '信息',
+        content: '请先选择一条订单'
+      })
+      return;
+    }
+    window.open(`/#common/order/detail/${item.id}`,'_blank');
+  }
+
+  //订单结束确认
+  handleConfirm = ()=>{
+    let item = this.state.selectedItem;
+    if(!item){
+      Modal.info({
+        title: '信息',
+        content: '请选择一条订单进行结束'
+      })
+      return;
+    }
+    // axios.ajax({
+    //   url: '/order/ebike_info',
+    //   data: {
+    //     params:{
+    //       orderId: item.id
+    //     }
+    //   }
+    // }).then((res)=>{
+    //   if(res.code == 0){
+    //     this.setState({
+    //       orderInfo: res.result,
+    //       orderConfirmVisble: true
+    //     })
+    //   }
+    // })
   }
 
   render(){
@@ -84,21 +131,34 @@ export default class Order extends React.Component{
         dataIndex: 'user_pay'
       }
     ]
+    const selectedRowKeys = this.state.selectedRowKeys;
+    const rowSelection = {
+      type: 'radio',
+      selectedRowKeys
+    }
     return (
       <div>
         <Card>
           <FilterForm />
         </Card>
         <Card style={{marginTop:10}}>
-          <Button>订单详情</Button>
-          <Button>结束订单</Button>
+          <Button type="primary" onClick={this.openOrderDetail}>订单详情</Button>
+          <Button type="primary" style={{marginLeft:10}} onClick={this.handleConfirm}>结束订单</Button>
         </Card>
         <div className="content-wrap">
           <Table
             bordered
             columns={columns}
             dataSource = {this.state.list}
+            rowSelection={rowSelection}
             pagination={this.state.pagination}
+            onRow={(record,index)=>{
+              return {
+                onClick:()=>{
+                  this.onRowClick(record,index);
+                }
+              }
+            }}
           />
         </div>
       </div>

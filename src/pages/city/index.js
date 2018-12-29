@@ -134,7 +134,7 @@ export default class City extends React.Component{
             bordered
             columns={columns}
             dataSource = {this.state.list}
-            // pagination={this.state.pagination}
+            pagination={this.state.pagination}
           />
         </div>
         <Modal
