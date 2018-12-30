@@ -11,6 +11,27 @@ export default class Order extends React.Component{
   params = {
     page: 1
   }
+  formList = [
+    {
+      type: 'SELECT',
+      label: '城市',
+      placeholder: '全部',
+      initialValue: '1',
+      width: 100,
+      list: [{id:'0', name: '全部'},{id:'1', name: '北京'},{id:'0', name: '全部'},{id:'2', name: '天津'},{id:'3', name: '上海'}]
+    },
+    {
+      type: '时间查询',
+    },
+    {
+      type: 'SElECT',
+      label: '订单状态',
+      placeholder: '全部',
+      initialValue: '1',
+      width: 100,
+      list: [{id:'0', name: '全部'},{id:'1', name: '北京'},{id:'0', name: '全部'},{id:'2', name: '天津'},{id:'3', name: '上海'}]
+    }
+  ]
   componentDidMount(){
     this.requestList();
   }
@@ -67,21 +88,21 @@ export default class Order extends React.Component{
       })
       return;
     }
-    // axios.ajax({
-    //   url: '/order/ebike_info',
-    //   data: {
-    //     params:{
-    //       orderId: item.id
-    //     }
-    //   }
-    // }).then((res)=>{
-    //   if(res.code == 0){
-    //     this.setState({
-    //       orderInfo: res.result,
-    //       orderConfirmVisble: true
-    //     })
-    //   }
-    // })
+    axios.ajax({
+      url: '/order/ebike_info',
+      data: {
+        params:{
+          orderId: item.id
+        }
+      }
+    }).then((res)=>{
+      if(res.code == 0){
+        this.setState({
+          orderInfo: res.result,
+          orderConfirmVisble: true
+        })
+      }
+    })
   }
 
   render(){
