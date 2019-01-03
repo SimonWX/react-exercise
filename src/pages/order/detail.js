@@ -94,13 +94,13 @@ export default class Order extends React.Component{
 
   // 绘制服务区
   drawServiceArea = (positionList)=>{
+    // 连接路线图
     let trackPoint = [];
     for(let i=0; i<positionList.length; i++){
       let point = positionList[i];
       trackPoint.push(new window.BMap.Point(point.lon, point.lat));
     }
-
-
+    // 绘制服务区
     let polygon = new window.BMap.Polygon(trackPoint,{
       strokeColor: '#CE0000',
       strokeWeight: 4,

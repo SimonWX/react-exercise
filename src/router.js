@@ -19,7 +19,7 @@ import BasicTable from './pages/table/basicTable'
 import HighTable from './pages/table/highTable'
 import City from './pages/city/index'
 import Order from './pages/order/index'
-import User from './pages/user/index'
+import User from './pages/user'
 import Common from './common'
 import OrderDetail from './pages/order/detail'
 export default class IRouter extends React.Component{
