@@ -3336,8 +3336,8 @@ draft-js@^0.10.0, draft-js@~0.10.0:
 
 draftjs-to-html@^0.8.4:
   version "0.8.4"
-  resolved "http://registry.npm.taobao.org/draftjs-to-html/download/draftjs-to-html-0.8.4.tgz#bda0adc00945db1f1baf0191b34b49b24191f1df"
-  integrity sha1-vaCtwAlF2x8brwGRs0tJskGR8d8=
+  resolved "https://registry.yarnpkg.com/draftjs-to-html/-/draftjs-to-html-0.8.4.tgz#bda0adc00945db1f1baf0191b34b49b24191f1df"
+  integrity sha512-+4hekxc8dTJvKk6usiEsFX9O1uOD9vLZZOs9ZI3RhTe89yNmtazYII/ILDXfbMPfzNaYfX7Gf3zjRm6UUFxqyg==
 
 draftjs-utils@^0.9.3:
   version "0.9.4"
@@ -3369,16 +3369,16 @@ ecc-jsbn@~0.1.1:
 
 echarts-for-react@^2.0.15-beta.0:
   version "2.0.15-beta.0"
-  resolved "http://registry.npm.taobao.org/echarts-for-react/download/echarts-for-react-2.0.15-beta.0.tgz#dbf30b66bfcc8b1cb9f889eb3ec59a8b1363c3d6"
-  integrity sha1-2/MLZr/Mixy5+InrPsWaixNjw9Y=
+  resolved "https://registry.yarnpkg.com/echarts-for-react/-/echarts-for-react-2.0.15-beta.0.tgz#dbf30b66bfcc8b1cb9f889eb3ec59a8b1363c3d6"
+  integrity sha512-brgogznteCirkvOvl/ZOozkpvBt612LBtDiSGE/pANTIO2+YyGpNfFXAIjEIDAY6yTvgdj+Ei7JISAfflXEn5Q==
   dependencies:
     fast-deep-equal "^2.0.1"
     size-sensor "^0.2.0"
 
 echarts@^4.2.0-rc.2:
   version "4.2.0-rc.2"
-  resolved "http://registry.npm.taobao.org/echarts/download/echarts-4.2.0-rc.2.tgz#6a98397aafa81b65cbf0bc15d9afdbfb244df91e"
-  integrity sha1-apg5eq+oG2XL8LwV2a/b+yRN+R4=
+  resolved "https://registry.yarnpkg.com/echarts/-/echarts-4.2.0-rc.2.tgz#6a98397aafa81b65cbf0bc15d9afdbfb244df91e"
+  integrity sha512-5Y4Kyi4eNsRM9Cnl7Q8C6PFVjznBJv1VIiMm/VSQ9zyqeo+ce1695GqUd9v4zfVx+Ow1gnwMJX67h0FNvarScw==
   dependencies:
     zrender "4.0.5"
 
@@ -8792,8 +8792,8 @@ react-dom@^16.6.3:
 
 react-draft-wysiwyg@^1.12.19:
   version "1.12.19"
-  resolved "http://registry.npm.taobao.org/react-draft-wysiwyg/download/react-draft-wysiwyg-1.12.19.tgz#9aa462726e2aa6e3e42736054280b1ad8691836c"
-  integrity sha1-mqRicm4qpuPkJzYFQoCxrYaRg2w=
+  resolved "https://registry.yarnpkg.com/react-draft-wysiwyg/-/react-draft-wysiwyg-1.12.19.tgz#9aa462726e2aa6e3e42736054280b1ad8691836c"
+  integrity sha512-q+QAx8yo/SnLjFoX/nlwnjCYITUSfFIsiQ+qwYnOREpdW7rtuSx1XlKr0pjqfWHiAnQDIhKuiaGLz4dWUwSusg==
   dependencies:
     classnames "^2.2.5"
     draftjs-utils "^0.9.3"
