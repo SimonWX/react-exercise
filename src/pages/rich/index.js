@@ -47,9 +47,9 @@ export default class RichText extends React.Component{
           <Editor
             editorState={editorState}
             onContentStateChange={this.onEditorChange}
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
-            editorClassName="editorClassName"
+            // toolbarClassName="toolbarClassName"
+            // wrapperClassName="wrapperClassName"
+            // editorClassName="editorClassName"
             onEditorStateChange={this.onEditorStateChange}
           />
         </Card>
