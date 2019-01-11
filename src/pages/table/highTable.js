@@ -1,7 +1,7 @@
 import React from 'react';
 import {Card, Table, Modal, message, Button, Badge} from 'antd';
 import axios from './../../axios/index';
-import Utils from './../../utils/utils';
+// import Utils from './../../utils/utils';
 export default class HighTable extends React.Component{
   state = {
 
