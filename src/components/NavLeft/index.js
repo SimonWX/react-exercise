@@ -1,14 +1,28 @@
-import MenuConfig from './../../config/menuConfig'
 import React from 'react'
 import { Menu, Icon } from 'antd';
 import {NavLink} from 'react-router-dom'
+import { connect } from 'react-redux'
+import { switchMenu } from './../../redux/action'
+import MenuConfig from './../../config/menuConfig'
 import './index.less'
 import Item from 'antd/lib/list/Item';
 const SubMenu = Menu.SubMenu;
 // const MenuItemGroup = Menu.ItemGroup;
-export default class NavLeft extends React.Component{
+class NavLeft extends React.Component{
+    state = {
+        currentKey: ''
+    }
+    handleClick=({item, key})=>{
+        const { dispatch } = this.props;
+        dispatch(switchMenu(item.props.title))
+        this.setState({
+            currentKey: key
+        })
+    }
     componentWillMount(){
         const menuTreeNode = this.renderMenu(MenuConfig);
+        // let currentKey = window.location.hash.replace('#', '') // 该方法有风险，当url中有？参数，则不能生效
+        let currentKey = window.location.hash.replace(/#|\?.*$/g,'')
         this.setState({menuTreeNode});
     }
     // 菜单渲染 
@@ -34,10 +48,15 @@ export default class NavLeft extends React.Component{
                     <img src="/assets/logo-ant.svg" alt=""/>
                     <h1>Imooc MS</h1> 
                 </div>
-                <Menu theme="dark">
+                <Menu 
+                    theme="dark"
+                    onClick={this.handleClick}
+                    selectedKeys={this.state.currentKey}
+                >
                     { this.state.menuTreeNode }
                 </Menu>
             </div>
         )
     }
 }
+export default connect()(NavLeft);

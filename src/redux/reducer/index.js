@@ -16,7 +16,6 @@
         menuName: action.menuName
       }  
       break;
-
     default:
       break;
   }
