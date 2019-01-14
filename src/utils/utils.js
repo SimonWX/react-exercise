@@ -5,8 +5,13 @@ export default {
     formateDate(time){
         if(!time) return '';
         let date = new Date(time);
-        return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+
-        '  '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+        // 时间长度格式统一 补零占位
+        let currentMonth = date.getMonth() < 9 ? (String(date.getMonth()+1)).padStart(2,'0') : date.getMonth()+1;
+        let currentDate = date.getDate() < 10 ? (String(date.getDate())).padStart(2, '0'): date.getDate();
+        let currentHours = date.getHours() < 10 ? (String(date.getHours())).padStart(2, '0'): date.getHours();
+        let currentMinutes = date.getMinutes() < 10 ? (String(date.getMinutes())).padStart(2, '0'): date.getMinutes();
+        let currentSeconds = date.getSeconds() < 10 ? (String(date.getSeconds())).padStart(2, '0'): date.getSeconds();
+        return `${date.getFullYear()}-${currentMonth}-${currentDate}  ${currentHours}:${currentMinutes}:${currentSeconds}`;
     },
     pagination(data,callback){
         return {

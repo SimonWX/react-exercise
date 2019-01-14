@@ -1,5 +1,5 @@
 import React from 'react'
-import Utils from '../../utils/utils'
+// import Utils from '../../utils/utils'
 import {Table} from 'antd'
 import "./index.less"
 export default class ETable extends React.Component{
@@ -8,7 +8,7 @@ export default class ETable extends React.Component{
   // 处理行点击事件
   onRowClick = (record, index)=>{
     let rowSelection = this.props.rowSelection;
-    if(rowSelection == 'checkbox'){
+    if(rowSelection === 'checkbox'){
       let selectedRowKeys = this.props.selectedRowKeys;
       let selectedIds = this.props.selectedIds;
       let selectedItem = this.props.seletedItem || [];
@@ -43,7 +43,7 @@ export default class ETable extends React.Component{
   onSelectChange = (selectedRowKeys,selectedRows)=>{
     let rowSelection = this.props.rowSelection;
     const selectedIds = [];
-    if(rowSelection == 'checkbox'){
+    if(rowSelection === 'checkbox'){
       selectedRows.map((item)=>{
         selectedIds.push(item.id);
       })
@@ -117,7 +117,7 @@ export default class ETable extends React.Component{
     // 当属性未false或者null时，说明没有单选或者复选列
     if(row_selection === false || row_selection === null){
       row_selection = false;
-    }else if(row_selection == 'checkbox'){
+    }else if(row_selection === 'checkbox'){
       // 设置类型未复选框
       rowSelection.type = 'checkbox';
     }else{

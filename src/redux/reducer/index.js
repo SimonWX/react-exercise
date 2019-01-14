@@ -15,8 +15,9 @@
         ...state,
         menuName: action.menuName
       }  
-      break;
     default:
-      break;
+      return {
+        ...state
+      }
   }
  }

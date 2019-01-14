@@ -1,11 +1,11 @@
 import React from 'react'
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
 import {NavLink} from 'react-router-dom'
 import { connect } from 'react-redux'
 import { switchMenu } from './../../redux/action'
 import MenuConfig from './../../config/menuConfig'
 import './index.less'
-import Item from 'antd/lib/list/Item';
+// import Item from 'antd/lib/list/Item';
 const SubMenu = Menu.SubMenu;
 // const MenuItemGroup = Menu.ItemGroup;
 class NavLeft extends React.Component{

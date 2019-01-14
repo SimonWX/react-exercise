@@ -62,7 +62,7 @@ export default class BasicTable extends React.Component{
         isShowLoading: true
       }
     }).then((res)=>{
-      if(res.code == 0){
+      if(res.code === 0){
         res.result.list.map( (item,index) => {
           item.key = index;
         })
@@ -120,7 +120,7 @@ export default class BasicTable extends React.Component{
         title: '性别',
         dataIndex: 'sex',
         render(sex){
-          return sex == 1 ? '男' : '女'
+          return sex === 1 ? '男' : '女'
         }
       },
       {

@@ -31,7 +31,6 @@ class FormRegister extends React.Component{
 
     handleSubmit = () => {
         let userInfo = this.props.form.getFieldsValue();
-        console.log(JSON.stringify(userInfo))
         message.success(`${userInfo.userName}恭喜许浩，通过本次表单组件学习，当前密码是：${userInfo.userPwd}`)
     }
     
@@ -192,7 +191,7 @@ class FormRegister extends React.Component{
                                         action="//jsonplaceholder.typicode.com/posts/"
                                         onChange={this.handleChange}
                                     >
-                                    {this.state.userImg?<img src={this.state.userImg}/>:<Icon type="plus"/>}
+                                    {this.state.userImg?<img src={this.state.userImg} alt=""/>:<Icon type="plus"/>}
                                     </Upload>
                                 )
                             }

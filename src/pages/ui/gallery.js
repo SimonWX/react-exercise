@@ -21,7 +21,7 @@ export default class Gallery extends React.Component{
         const imgList = imgs.map((list)=>list.map((item)=>
             <Card
                 style={{marginBottom:10}}
-                cover={<img src={'/gallery/'+item} onClick={()=>this.openGallery(item)}/>}
+                cover={<img src={'/gallery/'+item} onClick={()=>this.openGallery(item)} alt=""/>}
             >
                 <Card.Meta
                     title="React Admin"

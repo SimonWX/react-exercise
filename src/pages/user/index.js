@@ -122,7 +122,7 @@ export default class User extends React.Component{
                 }
               }
             }).then((res)=>{
-              if(res.code == 0){
+              if(res.code === 0){
                 _this.setState({
                   isVisible: false,
                 })
@@ -131,6 +131,8 @@ export default class User extends React.Component{
             })
           }
         })
+      break;
+      default:
       break;
     }
   }
@@ -141,12 +143,12 @@ export default class User extends React.Component{
     let type = this.state.type;
     let data = this.userForm.props.form.getFieldsValue();
     axios.ajax({
-      url: type == 'create' ? '/user/add' : '/user/edit',
+      url: type === 'create' ? '/user/add' : '/user/edit',
       data: {
         params: data
       }
     }).then((res)=>{
-      if(res.code == 0){
+      if(res.code === 0){
         this.userForm.props.form.resetFields();
         this.setState({
           isVisible: false
@@ -170,7 +172,7 @@ export default class User extends React.Component{
         title: '性别',
         dataIndex: 'sex',
         render(sex){
-          return sex == 1? '男' : '女'
+          return sex === 1? '男' : '女'
         }
       },
       {
@@ -216,7 +218,7 @@ export default class User extends React.Component{
       },
     ]
     let footer = {};
-    if(this.state.type=='detail'){
+    if(this.state.type === 'detail'){
       footer = {
         footer:null
       }
@@ -291,7 +293,7 @@ class UserForm extends React.Component{
       <Form layout="horizontal">
         <FormItem label="用户名" {...formItemLayout}>
           {
-              type == 'detail' ? userInfo.username :
+              type === 'detail' ? userInfo.username :
               getFieldDecorator('user_name',{
                 initialValue: userInfo.username
               })(
@@ -301,7 +303,7 @@ class UserForm extends React.Component{
         </FormItem>
         <FormItem label="性别" {...formItemLayout}>
           {
-              type == 'detail' ? userInfo.sex==1?'男':'女' :
+              type === 'detail' ? userInfo.sex === 1 ? '男' : '女' :
               getFieldDecorator('sex',{
                 initialValue: userInfo.sex
               })(
@@ -314,7 +316,7 @@ class UserForm extends React.Component{
         </FormItem>
         <FormItem label="状态" {...formItemLayout}>
           { 
-              type == 'detail' ? this.getState(userInfo.state) :
+              type === 'detail' ? this.getState(userInfo.state) :
               getFieldDecorator('state',{
                 initialValue: userInfo.state
               })(
@@ -330,7 +332,7 @@ class UserForm extends React.Component{
         </FormItem>
         <FormItem label="生日" {...formItemLayout}>
           { 
-              type == 'detail' ? userInfo.birthday :
+              type === 'detail' ? userInfo.birthday :
               getFieldDecorator('birthday',{
                 initialValue: moment(userInfo.birthday)
               })(
@@ -340,7 +342,7 @@ class UserForm extends React.Component{
         </FormItem>
         <FormItem label="联系地址" {...formItemLayout}>
           { 
-              type == 'detail' ? userInfo.address :  
+              type === 'detail' ? userInfo.address :  
               getFieldDecorator('address',{
                 initialValue: userInfo.address
               })(
