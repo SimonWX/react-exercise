@@ -23,7 +23,10 @@ class NavLeft extends React.Component{
         const menuTreeNode = this.renderMenu(MenuConfig);
         // let currentKey = window.location.hash.replace('#', '') // 该方法有风险，当url中有？参数，则不能生效
         let currentKey = window.location.hash.replace(/#|\?.*$/g,'')
-        this.setState({menuTreeNode});
+        this.setState({
+            menuTreeNode,
+            currentKey
+        });
     }
     // 菜单渲染 
     renderMenu=(data)=>{
