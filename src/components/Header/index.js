@@ -35,7 +35,7 @@ class Header extends React.Component{
         })
     }
     render(){
-        const menuType = this.props.menuType;
+        const {menuType, menuName} = this.props;
         return (
             <div className="header">
                 <Row className="header-top">
@@ -55,7 +55,7 @@ class Header extends React.Component{
                     menuType?'': 
                     <Row className="breadcrumb">
                         <Col span="4" className="breadcrumb-title">
-                            {this.props.menuName}
+                            {menuName || '首页'}
                         </Col>
                         <Col span="20" className="weather">
                             <span className="date">{this.state.sysTime}</span>
