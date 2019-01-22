@@ -394,8 +394,6 @@ class RoleAuthForm extends React.Component{
                         render={item=>item.title}
                     />
                 </FormItem>
-               
-                
             </Form>
         );
     }
