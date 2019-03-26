@@ -540,3 +540,35 @@ function binSearch(arr,data){
 	}
 	return -1
 }
+
+23、斐波那契数
+斐波那契指的是这样一个数列：1、1、2、3、5、8、13、21、34......在数学上，斐波纳契数列以如下被以递归的方法定义：F(1)=1，F(2)=1, F(n)=F(n-1)+F(n-2)（n>=2，n∈N*）;随着数列项数的增加，前一项与后一项之比越来越逼近黄金分割的数值0.6180339887..…
+方法1：递归
+function fibonacci(n){
+	if(n<=2){
+		return 1;
+	}else{
+		return fibonacci(n-1) + fibonacci(n-2)
+	}
+}
+注： 但是当参数n变大时，出现浏览器假死现象
+
+方法2：尾调用优化
+function fibonacci(n, res1 = 1, res2 = 2){
+	if(n<=2){
+		return res2;
+	}else{
+		return fibonacci(n-1, res2, res1 + res2)
+	}
+}
+
+24、水仙花数
+var a = 0, b =0 , c=0
+for(var i=100; i<1000; i++){
+	a = i%10;
+	b=parseInt(((i/10)%10));
+	c=parseInt(i/100);
+	if(i === a*a*a +b*b*b+c*c*c){
+		document.write('水仙花数：'+i+'<br/>');
+	}
+}
