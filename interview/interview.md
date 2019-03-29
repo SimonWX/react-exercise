@@ -692,6 +692,74 @@ function getQueryString(name){
 }
 ```
 
+## 26、解释下原型继承的原理
+以下代码展示了js引擎如何查找属性：
+```
+function getProperty(obj, prop){
+	if (obj.hasOwnProperty(prop)) {
+		return obj[prop];
+	} else if (obj._proto_!=null) {
+		return getProperty(obj._proto_, prop);
+	} else {
+		return undefined;
+	}
+}
+```
 
-
-
+## 27、js实现数组去重
+1. 创建一个新的临时数组来保存数组中已有的元素
+```
+var a = new Array(1,2,2,2,2,5,3,2,9,6,3);
+Array.prototype.uniqueOne = function(){
+	var n = []; // 一个新的临时数组
+	for(var i=0; i<this.length; i++){
+		// 如果把当前数组的第i项已经保存进了临时数组，那么跳过
+		if(n.indexOf(this[i]) == -1){
+			n.push(this[i]);
+		}
+	}
+	return n;
+}
+console.log(`去重后的数组：${a.uniqueOne()}`)
+```
+2. 使用哈希表存储已有的元素(该方法最快)
+```
+Array.prototype.uniqueTwo = function(){
+	var hash = {},
+		n = []; //hash 作为hash表，n为临时数组
+	for(var i=0; i<this.length; i++>){
+		if(!hash[this[i]]){ // 如果hash表中没有当前项
+			hash[this[i]] = true; //存入hash表
+			n.push(this[i]); // 当前元素push到临时数组中
+		}
+	}
+	return n;
+}
+```
+3. 使用indexOf判断数组元素第一次出现的位置是否为当前位置
+```
+Array.prototype.uniqueThree = function(){
+	var n = [this[0]];
+	for(var i=0; i<this.length; i++>){ //从第二项开始遍历
+		// 如果当前数组元素在数组中出现的第一次位置不是i,说明是重复元素
+		if(this.indexOf(this[i]) == i){
+			n.push(this[i])
+		}
+	}
+}
+```
+4. 先排序再去重
+```
+Array.prototype.uniqueFour = function(){
+	this.sort(function(a,b){
+		return a-b
+	})
+	var n = [this[0]];
+	for(var i=1; i<this.length; i++){
+		if(this[i] != this[i-1]){
+			n.push(this[i])
+		}
+	}
+	return n;
+}
+```
