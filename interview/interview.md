@@ -191,7 +191,8 @@ if(!Function.prototype.bind){
 				fNOP = function(){},
 				fBound = function(){
 					return fToBind.apply(
-						this instanceof fNOP ? this:oThis|| this, aArgs.concat(Array.prototype.slice.call(arguments))
+						this instanceof fNOP ? this : 
+						oThis || this, aArgs.concat(Array.prototype.slice.call(arguments))
 					)
 				};
 		fNOP.prototype = this.prototype;
