@@ -1,6 +1,6 @@
-https://www.jianshu.com/p/7ea01a3beb7a
+# *Interview Collection For FE/JavaScript*
 
-# 1、手写一个js的深克隆 （美团，爱奇艺）
+## 1、手写一个js的深克隆 （美团，爱奇艺）
 ```
 function deepCopy(obj){
 	// 判断是否是简单数据类型
@@ -18,7 +18,7 @@ function deepCopy(obj){
 }
 ```
 
-# 2、手写组合继承(美团，爱奇艺，搜狗)
+## 2、手写组合继承(美团，爱奇艺，搜狗)
 ```
 // 定义一个动物类
 function Animal (name){
@@ -56,7 +56,7 @@ promise.then(function (value){
 })
 ```
 
-# 3、防抖和节流
+## 3、防抖和节流
 scroll事件本身会触发页面的重新渲染，同时scroll事件的handler又会被高频度的触发，因此事件的handler内部不应该有复杂操作，例如DOM操作就不应该放在事件处理中
 针对此类高频度触发事件的问题(例如页面scroll，屏幕resize, 监听用户输入等), 有两种常用的解决方法，防抖和节流
 ### （1）防抖(Debouncing)
@@ -140,7 +140,7 @@ function realFunc(){
 window.addEventListener('scroll', throttle(realFunc, 500, 1000))
 ```
 
-# 4.手写原生js实现事件代理，并要求兼容浏览器(腾讯)
+## 4、手写原生js实现事件代理，并要求兼容浏览器(腾讯)
 ```
 // 简单的事件委托
 function delegateEvent(interfaceEle, selector, type, fn){
@@ -179,7 +179,7 @@ delegateEvent(odiv, 'a', click, function(){
 })
 ```
 
-# 5、手写Function.bind 函数(腾讯, 爱奇艺)
+## 5、手写Function.bind 函数(腾讯, 爱奇艺)
 ```
 if(!Function.prototype.bind){
 	Function.prototype.bind = function(oThis){
@@ -201,7 +201,7 @@ if(!Function.prototype.bind){
 }
 ```
 
-# 6、手写AJAX（腾讯）
+## 6、手写AJAX（腾讯）
 * 创建XMLHttpRequest对象
 * 指定响应函数
 * 打开连接（指定请求）
@@ -234,7 +234,7 @@ function state_Change(){
 }
 ```
 
-# 7、手写XMLHttpRequest
+## 7、手写XMLHttpRequest
 ```
 var xhr = new XMLHttpRequest();
 xhr.open('GET', '/api', false);
@@ -248,7 +248,7 @@ xhr.onreadystatechange = function(){
 xhr.send(null)
 ```
 
-# 8、网站资源的文件优化
+## 8、网站资源的文件优化
 1.  尽可能减少http请求次数，将css，js，图片各自合并
 2.  文件开启GZip压缩
 3.  浏览器缓存
@@ -259,20 +259,20 @@ xhr.send(null)
 8.  使用cdn托管
 9.  使用ajax缓存，让网站内容分批加载，局部更新
 
-# 9、JavaScript内置对象，原生对象，宿主对象关系
+## 9、JavaScript内置对象，原生对象，宿主对象关系
 原生(本地)对象 : 需要new 例如 Object Function Array RegExp <br/>
 内置对象 : 不要new 直接引用有 MATH, GLOBAL, 例如isNaN(), parseInt()这些都是GLOBAL对象的方法<br/>
 宿主对象(BOM DOM & 自定义对象) 其实说白了ECMAScript官方未定义的对象都属于宿主对象，因为其未定义的对象大多数是自己通过ECMAScript程序创建的对象
 
 -----
-# **美团酒旅 一面**
+## **美团酒旅 一面**
 # 10、TCP/IP 网络模型各层功能（美团酒旅）
 1. )网络接口层：是物理接口的规划。比特流的传输。数据封装成帧
 2. )互联网层：ip寻址或逻辑寻址
 3. )传输层：提供端到端的可靠传输
 4. )应用层：提供用户的接口
 
-# 11、Redux流程（美团酒旅）
+## 11、Redux流程（美团酒旅）
 1. )用户发出Action <br/>
 `store.dispatch(action)`
 2. )Store自动调用Reducer，并且传入两个参数：当前state和收到Action。然后Reducer会返回新的State <br/>
@@ -288,7 +288,7 @@ function listener(){
 }
 ```
 
-# 12、移动端适配（1px先画法）（美团酒旅）
+## 12、移动端适配（1px先画法）（美团酒旅）
 ```
 .navTab{
 	border-bottom：1px solid #eceef0;
@@ -297,7 +297,7 @@ function listener(){
 ```
 一种实现方式：先设置一个1px粗的border-bottom，这个时候在大部分移动设备上会呈现出很粗的先，在使用白色css阴影，并且便宜1px来压住过粗的border-bottom线。
 
-# 13.元素垂直水平居中
+## 13.元素垂直水平居中
 ```
 //已知宽高：
 .parent{
@@ -326,8 +326,8 @@ function listener(){
 ```
 
 -----
-# 美团酒旅---二面
-# 14、Css布局方式有哪些。每种方式有什么缺点
+## *美团酒旅---二面*
+## 14、Css布局方式有哪些。每种方式有什么缺点
 1. table布局 缺点：table 比其它 html 标记占更多的字节（造成下载时间延迟,占用服务器更多流量资源），
 <br/>table 会阻挡浏览器渲染引擎的渲染顺序。(会延迟页面的生成速度,让用户等待更久的时间)
 2. flex布局 
@@ -343,13 +343,13 @@ function listener(){
 	* 使用rem
 	* media query
 
-# 15、二叉树 前、中、后序遍历 ，如何用数组存储二叉树？
+## 15、二叉树 前、中、后序遍历 ，如何用数组存储二叉树？
 二叉树遍历分为三种: 前序，中序，后序。其中中序遍历最为重要（java很多树排序是基于中序）。A是根节点，B是左节点，C是右节点。
 * 前序遍历顺序： A - B - C
 * 中序遍历顺序： B - A - C
 * 后序遍历顺序： B - C - A 
 
-# 16、如何用数组存储二叉树？
+## 16、如何用数组存储二叉树？
 ```
 // 示例：树形数据的结构
 "type": "logic",
@@ -413,7 +413,7 @@ function treeToArr(t){
 }
 ```
 
-# 16、冒泡排序（Bubble Sort）
+## 16、冒泡排序（Bubble Sort）
 作为最简单的排序算法之一<br/>
 工作原理：它重复地走访过要排序的数列，一次比较两个元素，如果它们的顺序错误就把它们交换过来。<br/>
 走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。
@@ -433,7 +433,7 @@ function bubbleSort(arr){
 }
 ```
 
-# 17、选择排序（Selection Sort）
+## 17、选择排序（Selection Sort）
 在时间复杂度上表现最稳定的排序算法之一，因为无论什么数据进去都是o(n²)的时间复杂度。<br/>
 所以用到它的时候，数据规模越小越好。唯一的好处就是不占用额外的内存空间。<br/>
 工作原理：首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，<br/>
@@ -457,7 +457,7 @@ function selectionSort(arr){
 }
 ```
 
-# 18、插入排序(Insertion Sort)
+## 18、插入排序(Insertion Sort)
 插入排序的代码实现虽然没有冒泡排序和选择排序那么简单粗暴，但是它的原理应该是最容易理解的了。<br/>
 工作原理：通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。<br/>
 插入排序在实现上，通常采用in-place排序(即只用到o(1)的额外空间的排序)，因而在从后向前扫描过程中，<br/>
@@ -478,7 +478,7 @@ function insertSort(arr){
 }
 ```
 
-# 19、希尔排序（shell sort）又名缩小增量排序
+## 19、希尔排序（shell sort）又名缩小增量排序
 希尔排序是插入排序的一种更高效率的实现。它与插入排序的不同之处在于，它会优先比较距离较远的元素。<br/>
 希尔排序的核心在于间隔序列的设定。即可以提前设定好间隔序列，也可以动态的定义间隔序列。
 ```
@@ -502,7 +502,7 @@ function shellSort(arr){
 }
 ```
 
-# 20、归并排序(Merge Sort)
+## 20、归并排序(Merge Sort)
 作为一种典型的分而治之思想的算法应用，归并排序的实现由两种方法：
 1. 自上而下的递归（所有递归的方法都可以用迭代重写，所以就有了第2中方法）
 2. 自下而上的迭代
@@ -538,7 +538,7 @@ function merge(left,right){
 }
 ```
 
-# 21、快速排序(Quick Sort)
+## 21、快速排序(Quick Sort)
 快速排序是处理大数据集最快的排序算法之一。它是一种分而治之的算法，通过递归的方法将数据依次分解为包含较小元素和较大元素的不同子序列。<br/>
 该算法不断重复这个步骤直到所有数据都是有序的。这个算法首先要在列表中选择一个元素作为基准值。<br/>
 数据排序围绕基准值进行，将列表中小于基准值的元素移到数组的底部，将大于基准值的元素移到数组的顶部。
@@ -561,7 +561,7 @@ function qSort(arr){
 }
 ```
 
-# 22、检索算法
+## 22、检索算法
 在列表中查找数据有两种方式: 顺序查找和二分查找。顺序查找适合用于元素随机排序的列表。<br/>
 二分查找适用于元素已排序的列表 二分查找效率更高，但是必须在进行查找之前花费额外时间将列表中的元素排序。<br/>
 顺序查找（线性查找） ： 对于查找数据，最简单的方法就是从列表的第一个元素开始对列表元素逐个进行判断，直到找到了想要的结果。<br/>
@@ -598,7 +598,7 @@ function binSearch(arr,data){
 }
 ```
 
-# 23、斐波那契数
+## 23、斐波那契数
 斐波那契指的是这样一个数列：1、1、2、3、5、8、13、21、34......<br/>
 在数学上，斐波纳契数列以如下被以递归的方法定义：F(1)=1，F(2)=1, F(n)=F(n-1)+F(n-2)（n>=2，n∈N*）;<br/>
 随着数列项数的增加，前一项与后一项之比越来越逼近黄金分割的数值0.6180339887..…
@@ -625,7 +625,7 @@ function fibonacci(n, res1 = 1, res2 = 2){
 }
 ```
 
-# 24、水仙花数
+## 24、水仙花数
 ```
 var a = 0, b =0 , c=0
 for(var i=100; i<1000; i++){
@@ -638,7 +638,7 @@ for(var i=100; i<1000; i++){
 }
 ```
 
-# 25、获取当前url，并分解出所有参数 （百度）
+## 25、获取当前url，并分解出所有参数 （百度）
 js获取url中的一些参数的意思
 * location对象，含有当前url的信息，属性href整个url字符串
 * protocol，含有url第一部分的字符串，如http：
