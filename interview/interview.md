@@ -267,7 +267,7 @@ xhr.send(null)
 
 -----
 ## **美团酒旅 一面**
-# 10、TCP/IP 网络模型各层功能（美团酒旅）
+## 10、TCP/IP 网络模型各层功能（美团酒旅）
 1. )网络接口层：是物理接口的规划。比特流的传输。数据封装成帧
 2. )互联网层：ip寻址或逻辑寻址
 3. )传输层：提供端到端的可靠传输
@@ -762,4 +762,65 @@ Array.prototype.uniqueFour = function(){
 	}
 	return n;
 }
+```
+
+## 28、不借助临时变量，进行两个整数的交换
+假如 输入a=2,b=4, 需要输入a=4,b=2
+这种问题非常巧妙，需要大家跳出惯有思维，利用a,b进行置换
+主要是利用+-去进行运算，类似a=a+(b-a)实际上等同于最后的a=b
+```
+function swap(a, b){
+	b = b - a;
+	a = a + b;
+	b = a - b;
+	return [a, b]
+}
+```
+
+## 29、获取数组中最大或最小值
+```
+// 该方法适合一维或多维数组求最大最小值得情况
+function maxAndMin(arr){
+	return {
+		max: Math.max.apply(null, arr.join(',').split(',')),
+		min: Math.min.apply(null, arr.join(',').split(','))
+	}
+}
+```
+## 30、找出数组中只出现一次的元素
+```
+function num(arr){
+	var str = arr.join('');
+	var res = [];	
+	for(var i=0; i<str.length; i++){
+		var num = (str.split(str[i])).length-1);
+		if(num===1){
+			res.push(str[i]);
+		}
+	}
+}
+```
+## 31、将数组按层次展开
+```
+var list = [1,2,[3,4],[5,6,[7,8],9],10,11]
+var res = [];
+function flatten(list,depth){
+		if(deptn == 0){
+			for(var i=0; i<list.length; i++){
+				res.push(list[i]);
+			}
+			return;
+		}
+		for(var i=0; i<list.length; i++){
+			if(list[i] instanceof Array){
+				flatten(list[i], depth - 1);
+			}else{
+				res.push(list[i]);
+			}
+		}
+		return res;
+}
+console.log(flatten(list, 1));
+res = [];
+console.log(flatten(list, 2))
 ```
