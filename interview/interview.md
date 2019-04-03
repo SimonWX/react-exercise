@@ -869,4 +869,41 @@ var b = a.splice(1, 1, 'e', 'f'); // a=['a', 'e', 'f', 'c'] ,b=['b']
 var a = '0123456';
 var b = a.split('', 3); // b = ['0', '1', '2']
 ```
+## 33、 实现阶乘（递归）
+```
+function factorialize(num){
+	if(num < 0){
+		return -1;
+	}else if(num === 0 || num === 1){
+		return 1
+	}else{
+		return ( num * factorialize(num - 1))
+	}
+}
+```
 
+## 34、string里的每个单词首字母大写
+```
+function titleCase(str){
+	return str.toLowerCase().split(' ').map((item)=>{
+		return item.replace(item.charAt(0),item[0].toUpperCase())
+	}).join(' ')
+}
+titleCase("I'm a little tea pot");
+```
+
+## 35、返回数组中最大的数
+* 注：其实还有一种就是for循环
+```
+function largestOfFour(arr){
+	var new_arr = [];
+	for(var i=0; i<arr.length; i++){
+		arr[i].sort(function(a,b){
+			return b - a;
+		})
+		new_arr.push(arr[i][0]);
+	}
+	return new_arr;
+}
+largestOfFour([[4, 5, 1, 3], [13, 27, 18, 26], [32, 35, 37, 39], [1000, 1001, 857, 1]])
+```
