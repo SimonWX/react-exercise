@@ -907,3 +907,46 @@ function largestOfFour(arr){
 }
 largestOfFour([[4, 5, 1, 3], [13, 27, 18, 26], [32, 35, 37, 39], [1000, 1001, 857, 1]])
 ```
+
+## 36、使用promise对setTimeout进行封装，从而支持链式的调用
+```
+const delay = (func, millisec, options) =>{
+	let timer = 0
+	let reject = null
+	const promise = new Promise((resolve, _reject)=>{
+		reject = _reject
+		timer = setTimeout(()=>{
+			resolve(func(options))
+		},millisec)
+	})
+	return {
+		get promise(){
+			return promise
+		},
+		cancel(){
+			if(timer){
+				clearTimeout(timer)
+				timer = 0
+				reject(new Error('timer is cancelled'))
+				reject = null
+			}
+		}
+	}
+}
+
+// 使用
+const d = delay(({a, b})=>{
+	console.log(a, b)
+	return a + b
+}, 2000, {a: 1, b: 3})
+
+d.promise.then((result)=>{
+	console.log('result', result)
+}).catch((err)=>{
+	console.log(err)
+})
+// cancel
+// setTimeout(()=>{
+//	d.cancel()
+// },1000)
+```
