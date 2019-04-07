@@ -950,3 +950,103 @@ d.promise.then((result)=>{
 //	d.cancel()
 // },1000)
 ```
+url: http://daief.github.io/2018-08-21/encapsulate-setTimeout-with-promise.html
+
+## 37、页面布局
+题目：假设高度已知，请写出三栏布局，其中左右栏宽300px，中间自适应<br/>
+1.  浮动解决方案
+```
+.left{
+	float: left;
+	width: 300px;
+	background-color: red;
+}
+.right{
+	float: right;
+	width: 300px;
+	background-color: yellow;
+}
+.center{
+	background-color: blue;
+}
+```
+2. 绝对定位解决方案
+```
+.left{
+	left: 0;
+	width: 300px;
+	background-color: red;
+}
+.center{
+	left: 300px;
+	right: 300px;
+	background-color：yellow;
+}
+.right{
+	right: 0;
+	width: 300px;
+	background-color: blue;
+}
+```
+3. flexbox解决方案
+```
+// 容器设为flex
+.box{
+	display: flex;
+}
+.left{
+	width: 300px;
+	background-color: red;
+}
+.center{
+	flex: 1;
+	background-color: yellow;
+}
+.right{
+	width: 300px;
+	background-color: blue;
+}
+```
+4. 表格布局解决方案
+```
+.box{
+	// 容器设置为table
+	display: table;
+}
+.left{
+	display: table-cell;
+	width: 300px;
+	background-color: red;
+}
+.center{
+	display: table-cell;
+	background-color: yellow;
+}
+.right{
+	display: table-cell;
+	width: 300px;
+	background-color: blue;
+}
+```
+5. 网格布局
+```
+.box{ // 容器设置
+	display: grid;
+	grid-template-row: 100px;
+	grid-template-columns: 300px auto 300px;
+}
+.left{
+	background-color: red;
+}
+.center{
+	background-color: yellow;
+}
+.right{
+	background-color: blue;
+}
+```
+优缺点分析：
+* 浮动布局：脱离文档流但兼容性好
+* 绝对定位：脱离文档流导致子元素也脱离文档流但快捷
+* flex布局：较完美，但ie8不能兼容
+* 表格布局：兼容性好
