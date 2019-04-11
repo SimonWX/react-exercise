@@ -1257,7 +1257,8 @@ for(var i=0; i<10; i++){
 	var thisPage = location.href;
 	var referringPage = (document.referrer) ? document.referrer : "none";
 	var beacon = new Image();
-	beacon.src = "http://www.example.com/logger/beacon.gif?page=" + encodeURI(thisPage) + "&ref=" + encodeURI(referringPage);
+	beacon.src = "http://www.example.com/logger/beacon.gif?page=" + encodeURI(thisPage) 
+	+ "&ref=" + encodeURI(referringPage);
 </script>
 ```
 原因：
