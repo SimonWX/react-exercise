@@ -1270,3 +1270,92 @@ for(var i=0; i<10; i++){
 6. 相比XMLHttpRequest对象发送GET请求，性能上更好
 7. GIF的最低合法体积最小（最小的BMP文件需要74字节，PNG需要67字节，GIF只需要43字节）
 8. 图片请求不占用Ajax请求限额
+
+## 45、JS异步解决方案的发展历程以及优缺点
+1. 回调函数（callback）
+	```
+	setTimeout(()=>{
+		// callback 函数体
+	},1000)
+	```
+	* 优点：解决了同步的问题(只要有一个任务耗时很长，后面的任务都必须排队等候，会拖延整个程序的执行)<br/>
+	* 缺点：回调地狱，不能用try catch捕获错误，不能return<br/>
+	回调地狱的问题在于：
+		* 缺乏顺序性： 回调地狱导致的调试困难，和大脑的思维方式不符
+		* 嵌套函数存在耦合性，一旦有所改动，就会牵一发而动全身，即(控制反转)
+		* 嵌套函数过多的话，很难处理错误
+	```
+	ajax('xxx',()=>{
+		// callback函数体
+		ajax('xxx2',()=>{
+			// callback函数体
+			ajax('xxx3',()=>{
+				// callback 函数体
+			})
+		})
+	})
+	```
+2. Promise<br/>
+Promise就是为了解决callback的问题而产生的。
+Promise实现了链式调用，也就是说每次then后返回的都是一个全新的Promise，如果我们在then中return，return的结果会被Promise.resolve()包装
+	* 优点：解决了回调地狱的问题
+	```
+	ajax('xxx1')
+		.then(res => {
+			// 操作逻辑
+			return ajax('xxx2')
+		}).then(res => {
+			// 操作逻辑
+			return ajax('xxx3')
+		}).then(res => {
+			// 操作逻辑
+		})
+	```
+	* 缺点：无法取消promise，错误需要通过回调函数来捕获
+
+3. Generator<br/>
+特点：可以控制函数的执行，可以配合co函数库使用
+	```
+	function *fetch(){
+		yield ajax('xxx1', () => {})
+		yield ajax('xxx2', () => {})
+		yield ajax('xxx3', () => {})
+	}
+	let it = fetch()
+	let result1 = it.next()
+	let result2 = it.next()
+	let result3 = it.next()
+	```
+4. Async/await<br/>
+	async，await是异步的终极解决方案
+	* 优点：代码清晰，不用像Promise写一大堆then链，处理了回调地狱的问题
+	* 缺点：await将异步代码改造成同步代码，如果多个异步操作没有依赖性而使用await会导致性能上的降低
+	```
+	async function test(){
+		// 以下代码没有依赖性的话，完全可以使用Promise.all的方式
+		// 如果有依赖性的话，其实就是解决回调地狱的例子
+		await fetch('xxx1')
+		await fetch('xxx2')
+		await fetch('xxx3')
+	}
+	```
+	下面来看一个使用await的例子
+	```
+	let a = 0
+	let b = async () => {
+		a = a + await 10
+		console.log('2',a) // -> '2' 10
+	}
+	b()
+	a++
+	console.log('1', a) // -> '1' 1
+	```
+	对于以上代码可能会心存疑惑，解释下原因
+	* 首先函数b先执行，在执行到await 10之前变量a还是0，因为await内部实现了generator，generator会保留堆栈中东西，所以这时候a = 0被保存下来
+	* 因为await是异步操作，后来的表达式不返回Promise的话，就会包装成Promise.resolve(返回值)，然后会去执行函数外的同步代码
+	* 同步代码执行完毕后开始执行异步代码，将保存下来的值拿出来使用，这时候a=0+10<br/>
+
+	上述解释中提到了await内部实现了generator，其实await就是generator加上Promise的语法糖，且内部实现了自动执行generator。如果熟悉co的话，其实自己就可以实现这样的语法糖。
+
+
+	
