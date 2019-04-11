@@ -1543,8 +1543,19 @@ self.addEventListener('fetch', e => {
 当我们重新刷新页面可以发现我们缓存的数据是从 Service Worker 中读取的
 ![Image text](https://user-gold-cdn.xitu.io/2018/3/28/1626b20e4f8f3257?w=2818&h=298&f=png&s=74833)
 
+## 53、Nginx
+Nginx是一个高性能的HTTP和反向代理服务器，同时也是一个IMAP/POP3/SMTP代理服务器。
+常见场景有：
+* 静态资源服务器
+* 动态匹配
+* 反向代理
+* Gzip压缩
+* 负载均衡
 
+先来看一下默认的Nginx配置，我将以此为基础依次介绍Nginx的用法
+* Nginx安装目录下的nginx.conf就是Nginx全局的配置文件，我们主要修改这里的内容。nginx.config.default作为配置文件的备份。
 
+https://juejin.im/post/5cae9de95188251ae2324ec3?utm_source=gold_browser_extension
 
 
 
