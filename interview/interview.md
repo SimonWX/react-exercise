@@ -1411,10 +1411,41 @@ m|多行
 十六进制值|/^#?[a-f0-9]{6}|[a-f0-9]{3})$/
 电子邮箱|/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/  或者  /^[a-z\d]+(\.[a-z\d]+)*@([\da-z](-[\da-z])?)+(\.{1,2}[a-z]+)+$/
 URL|/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/
-删除代码\\注释|(?<!http:\|\S)//.*$
+删除代码\\\注释|(?<!http:\|\S)//.*$
 
+## 48、Proxy
+Proxy是ES6中新增的功能，可以用来自定义对象中的操作
+```
+let p = new Proxy(target, handler);
+// `target`代表需要添加代理的对象
+// `handler` 用来自定义对象中的操作
+```
+可以很方便的使用Proxy来实现一个数据绑定和监听
+```
+let onWatch = (obj, setBind, getLogger){
+	let handler = {
+		get(target, property, receiver){
+			getLogger(target, property)
+			return Reflect.get(target,property,receiver);
+		},
+		set(target, property, value, receiver){
+			setBind(value);
+			return Reflect.set(target, property, value);
+		}
+	}
+	return new Proxy(obj, handler);
+};
 
-
+let obj = { a : 1 }
+let value
+let p = onWatch(obj, (v)=>{
+	value = v
+}, (target, property)=>{
+	console.log(`Get '${property}' = ${target[property]}`)
+})
+p.a = 2 // bind `value` to `2`
+p.a // -> Get 'a' = 2
+```
 
 
 
