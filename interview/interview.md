@@ -1110,3 +1110,162 @@ BFC，Block Formatting Context 直译为‘块级格式化上下文’<br/>
 
 ## 41、聊聊Redux和Vuex的设计思想
 url：https://zhuanlan.zhihu.com/p/53599723
+
+## 42、改造下面代码，使之输出0-9，写出你能想到的所有解法
+```
+for(var i=0; i<10; i++){
+	setTimeout(()=>{
+		console.log(i)
+	},1000)
+}
+```
+* 方法一<br/>
+	原理： 
+	* 利用setTimeout函数的第三个参数，会作为回调函数的第一个参数传入
+	* 利用bind函数部分执行的特性
+	```
+	//代码1：
+	for(var i=0; i<10; i++){
+		setTimeout(i => {
+			console.log(i);
+		},1000,i)
+	}
+	//代码2：
+	for(var i=0; i<10; i++){
+		setTimeout(
+			console.log, 1000, i
+		)
+	}
+	//代码3：
+	for(var i=0; i<10; i++){
+		setTimeout(console.log.bind(Object.create(null),i),1000)
+	}
+	```
+* 方法二<br/>
+	原理：
+	* 利用let变量的特性---在每一次for循环的过程中，let声明的变量会在当前的块级作用域里面（for循环的body体，也即两个花括号之间的内容区域）创建一个文法环境（Lexical Environment），该环境里面包括了当前for循环过程中的i
+	```
+	//代码1：
+	for (let i=0; i<10, i++){
+		setTimeout(()=>{
+			console.log(i)
+		},1000)
+	}
+	//等价于
+	for(let i=0; i<10; i++){
+		let _i = i ; //const _i = i;
+		setTimeout(()=>{
+			console.log(_i);
+		},1000)
+	}
+	```
+* 方法三<br/>
+	原理：
+	* 利用函数自执行的方式，把当前for循环过程中的i传递过去，构建出块级作用域。IIFE其实并不属于闭包的范畴。
+	* 利用其它方式构建出块级作用域
+	```
+	//代码1：
+	for(var i=0; i<10; i++){
+		(i=>{
+			setTimeout(()=>{
+				console.log(i);
+			},1000)
+		})(i)
+	}
+	//代码2：
+	for(var i=0; i<10; i++){
+		try {
+			throw new Error(i);
+		}catch({
+			message: i
+		}){
+			setTimeout(()=>{
+				console.log(i)
+			},1000)
+		}
+	}
+	```
+* 方法四<br/>
+	原理：
+	* 很多其它的方案只是把console.log(i)放在一个函数里面，因为setTimeout函数的第一个参数只接受函数以及字符串，如果是js语句的话，js引擎应该会自动在该语句外面包裹一层函数
+	```
+		//代码1：
+		for(var i=0; i<10; i++){
+			setTimeout(console.log(i), 1000)
+		}
+		//代码2：
+		for(var i=0; i<10; i++){
+			setTimeout((()=>{
+				console,log(i)
+			})(),1000)
+		}
+		//代码3：
+		for(var i=0; i<10; i++){
+			setTimeout((i=>{
+				console.log(i);
+			})(i),1000)
+		}
+		//代码4：
+		for(var i=0; i<10; i++){
+			setTimeout((i=>{
+				console.log(i)
+			}).call(Object.create(null),i),1000)
+		}
+		//代码5:
+		for(var i=0;i<10;i++){
+			setTimeout((i)=>{
+				console.log(i)
+			}).apply(Object.create(null),[i]), 1000)
+		}
+		//代码6:
+		for(var i=0; i<10; i++){
+			setTimeout((i=>{
+				console.log(i)
+			}).apply(Object.create(null), {length:1, '0':i}),1000)
+		}
+	```
+* 方法五<br/>
+	原理：
+	* 利用eval或者new Function执行字符串，然后执行过程同方法四代码1：
+	```
+	//代码1：
+	for(var i=0; i<10; i++){
+		setTimeout(eval('console.log(i)'),1000)
+	}
+	//代码2：
+	for(var i=0; i<10; i++){
+		setTimeout(new Function('i','console.log(i)')(i),1000)
+	}
+	//代码3：
+	for(var i=0; i<10; i++){
+		setTimeout(new Function('console.log(i)')(),1000)
+	}
+	```
+
+## 43、Vue的响应式原理中Object.defineProperty有什么缺陷？为什么在Vue3.0采用了Proxy，抛弃了Object.defineProperty?
+1. Object.defineProperty无法监控到数组下标的变化，导致通过数组下标添加元素，不能实时响应。
+2. Object.defineProperty只能劫持对象的属性，从而需要对每个对象，每个属性进行好好遍历，如果，属性值是对象，还需要深度遍历。Proxy可以劫持整个对象，并返回一个新的对象。
+3. Proxy不仅可以代理对象，还可以代理数组。还可以代理动态增加的属性。
+
+## 44、为什么通常在发送数据埋点请求的时候使用的是1x1像素的透明gig图片？
+英文术语叫: image beacon<br/>
+主要应用于只需要向服务器发送数据(日志数据)的场合，且无需服务器有消息体回应。比如收集访问者的统计信息。
+一般做法是服务器用一个1x1的gif图片来作为响应，当然这有点浪费服务器资源。因此用header来响应比较合适，目前比较合适的做法是服务器发送"204 No Content"，即“服务器成功处理了请求，但不需要返回任何实体内容”。
+另外该脚本的位置一般放在页面最后以免阻塞页面渲染,并且一般情况下也不需要append到DOM中。通过它的onerror和onload事件来检测发送状态。
+```
+<script type="text/javascript">
+	var thisPage = location.href;
+	var referringPage = (document.referrer) ? document.referrer : "none";
+	var beacon = new Image();
+	beacon.src = "http://www.example.com/logger/beacon.gif?page=" + encodeURI(thisPage) + "&ref=" + encodeURI(referringPage);
+</script>
+```
+原因：
+1. 没有跨域问题，一般这种上报数据，代码要写通用的（img天然支持跨域）
+2. 不会阻塞页面加载，影响用户体验，只要new Image对象就好了; (排除JS/css文件资源上报)
+3. 在所有图片中，体积最小（相对于PNG/JPG）
+4. 能够完成整个HTTP请求+响应（尽管不需要相应内容）
+5. 触发GET请求之后不需要获取和处理数据，服务器也不需要发送数据,并且一般客户端也不需要做出响应,只关心数据是否发送到服务器
+6. 相比XMLHttpRequest对象发送GET请求，性能上更好
+7. GIF的最低合法体积最小（最小的BMP文件需要74字节，PNG需要67字节，GIF只需要43字节）
+8. 图片请求不占用Ajax请求限额
