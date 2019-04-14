@@ -265,23 +265,21 @@ xhr.send(null)
 内置对象 : 不要new 直接引用有 MATH, GLOBAL, 例如isNaN(), parseInt()这些都是GLOBAL对象的方法<br/>
 宿主对象(BOM DOM & 自定义对象) 其实说白了ECMAScript官方未定义的对象都属于宿主对象，因为其未定义的对象大多数是自己通过ECMAScript程序创建的对象
 
------
-## **美团酒旅 一面**
 ## 10、TCP/IP 网络模型各层功能（美团酒旅）
-1. )网络接口层：是物理接口的规划。比特流的传输。数据封装成帧
-2. )互联网层：ip寻址或逻辑寻址
-3. )传输层：提供端到端的可靠传输
-4. )应用层：提供用户的接口
+1. 网络接口层：是物理接口的规划。比特流的传输。数据封装成帧
+2. 互联网层：ip寻址或逻辑寻址
+3. 传输层：提供端到端的可靠传输
+4. 应用层：提供用户的接口
 
 ## 11、Redux流程（美团酒旅）
-1. )用户发出Action <br/>
+1. 用户发出Action <br/>
 `store.dispatch(action)`
-2. )Store自动调用Reducer，并且传入两个参数：当前state和收到Action。然后Reducer会返回新的State <br/>
+2. Store自动调用Reducer，并且传入两个参数：当前state和收到Action。然后Reducer会返回新的State <br/>
 `let nextState = todoApp(previousState, action)`
-3. )State一旦有了变化，Store就会调用监听函数 <br/>
+3. State一旦有了变化，Store就会调用监听函数 <br/>
 // 设置监听函数<br/>
 `store.subscribe(listener)`
-4. )listener可以通过store.getState()得到当前状态。如果使用的是React，这时可以触发重新渲染View
+4. listener可以通过store.getState()得到当前状态。如果使用的是React，这时可以触发重新渲染View
 ```
 function listener(){
 	let newState = store.getState();
@@ -326,8 +324,6 @@ function listener(){
 }
 ```
 
------
-## *美团酒旅---二面*
 ## 14、Css布局方式有哪些。每种方式有什么缺点
 1. table布局 缺点：table 比其它 html 标记占更多的字节（造成下载时间延迟,占用服务器更多流量资源），
 <br/>table 会阻挡浏览器渲染引擎的渲染顺序。(会延迟页面的生成速度,让用户等待更久的时间)
@@ -1824,7 +1820,7 @@ extend2(Cat, Animal);　　
 var cat1 = new Cat("大毛", "黄色");　　
 alert(cat1.species); // 动物
 ```
----------------------------
+
 ### 下面是非构造函数的继承模式
 #### 六、Object()方法
 json格式的发明人，提出了一个object()函数，可以做到这一点。
@@ -2114,7 +2110,6 @@ function deepCopy(p, c){
 		* res.send() 返回多种形式数据
 		* res.sendFile 返回文件
 		* res.sendStatus() 返回状态
-
 ## 60、React集锦
 1. redux中间件
 	* 中间件提供第三方插件的模式，自定义拦截 action -> reducer 的过程。变为 action -> middlewares -> reducer 。这种机制可以让我们改变数据流，实现如异步 action ，action 过滤，日志输出，异常报告等功能。
