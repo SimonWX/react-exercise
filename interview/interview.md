@@ -1557,13 +1557,101 @@ Nginx是一个高性能的HTTP和反向代理服务器，同时也是一个IMAP/
 
 https://juejin.im/post/5cae9de95188251ae2324ec3?utm_source=gold_browser_extension
 
+## 54、typeof运算符和instanceof运算符以及isPrototypeOf()方法的区别
+typeof是一个运算符，用于检测数据的类型，比如基本数据类型null、undefined、string
 
+## 55、Vue组件中的data为什么必须是一个函数
+为什么组件中data必须是一个函数而不是对象，我们首先来看一下第一个声明式渲染的的demo中data 我们只在当前页面的挂载的div#app这个点上使用，但是对于组件有一个很明显的特性就是在于它可以被复用。现在以一个全局注册一个组件来分析<br/>
+我们先假设将data作为一个对象：<br/>
+因为组件是可以被复用的，那么注册了一个组件本质上就是创建了一个组件构造器的引用，而真正当我们使用组件的时候才会去将组件实例化
+```
+// 创建一个组件
+var Component = function(){
 
+}
+Component.prototype.data = {
+	a: 1,
+	b: 2
+}
+// 使用组件
+var component1 = new Component()
+var component2 = new Component()
+component1.data.b = 3
+component2.data.b  // 3
+```
+可以发现当使用组件的时候, 虽然data是在构造器的原型链上被创建的，但是实例化的component1和component2确是共享同样的data对象，当你修改一个属性的时候，data也会发生改变，这明显不是我们想要的效果。
+```
+var Component = function(){
+}
+Component.prototype.data = function(){
+	return {
+		a: 1,
+		b: 2
+	}
+}
+// 使用组件
+var component1 = new Component()
+var component2 = new Component()
+component1.data.b = 3
+component2.data.b // 2
+```
+当data是一个函数时，每一个实例的data属性都是独立的，不会互相影响。这都是因为js本身的特性带来的。js本身的面向对象编程也是基于原型链和构造函数，应该会注意原型链上添加一般都是一个函数方法而不会去添加一个对象
 
-
-
-
-
+## 56、Vue面试题集锦
+1. vuex有哪几种属性？
+	* 5种。分别是State，Getter，Mutation，Action，Module
+2. vuex的state特性是？
+	* vuex就是一个仓库，仓库里面放了很多对象。其中state就是数据源存放的地方，对应于一般vue对象里面的data
+	* state里面存放的数据是响应式的，vue组件从store中读取数据，若是store中的数据发生改变，依赖这个数据的组件也会发生更新
+	* 它通过mapState把全局的state和getters映射到当前组件的computed计算属性中
+3. vuex的Getter特性是？
+	* getters可以对state进行计算操作，它就是store的计算属性
+	* 虽然在组件内也可以做计算属性，但是getters可以在多组件之间复用
+	* 如果一个状态只在一个组件内使用，是可以不用getters
+4. vuex的Mutation特性是？
+	* Action类似于mutation，不同在于:
+	* （1）Action提交的是mutation，而不是直接变更状态
+	* （2）Action可以包含任意异步操作
+5. vue.js中ajax请求代码应该写在组件的methods中还是vuex的actions中？
+	* 如果请求来的数据时不时要被其他组件公用，仅仅在请求的组件内使用，就不需要放入vuex的state里。
+	* 如果被其他地方复用，这个很大几率上是需要的，如果需要，请将需求放入action里，方便复用，并包装成promise返回，在调用处用async await 处理返回的数据，如果不需要复用这个请求，那么直接写在vue文件里比较方便。
+6. vue的优点是什么？
+	* 低耦合。视图（view）可以独立于Model变化和修改，一个ViewModel可以绑定到不同的'view'上，当view变化的时候Model可以不变，当model变化的时候view也可以不变。
+	* 可重用性。 可以把一些视图逻辑放在一个viewModel里面，让很多view重用这段视图逻辑。
+	* 独立开发。开发人员可以专注于业务逻辑和数据的开发（viewModel），设计人员可以专注于页面设计
+	* 可测试。界面素来是比价难于测试的，而现在测试可以针对ViewModel来写。
+7. 什么是MVVM？
+	* MVVM是Model-View-ViewModel的缩写。MVVM是一种设计思想。Model层代表数据模型，也可以在Model中定义数据修改和操作的业务逻辑，View代表UI组件，它负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。
+	* 在MVVM架构下，View和Model之间并没有直接的联系，而是通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反映到view上。
+	* ViewModel通过双向数据绑定把View层和Model层连接起来，而View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注业务逻辑，不需手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全由MVVM来统一管理。
+8. \<keep-alive>\</keep-alive>的作用是什么？
+	* \<keep-alive>\</keep-alive>包裹动态组件时，会缓存不活动的组件实例，主要用于保留组件状态或避免重新渲染。
+	* 在vue 2.1.0版本之后，keep-alive新加入两个属性，include（包含的组件缓存）与exclude（排除的组件不缓存，优先级大于include）。
+	```
+	<keep-alive include="include_components" exclude="exclude_components">
+		<component>
+			<!-- 该组件是否缓存取决于include和exclude属性 -->
+		</component>
+	</keep-alive>
+	```
+	参数解释
+	* include - 字符串货正则表达式，只有名称匹配的组件会被缓存
+	* exclude - 字符串或正则表达式，任何名称匹配的组件都不会被缓存
+	* include和exclude的属性允许组件有条件的缓存。二者都可以用','分隔字符串，正则表达式，数组。当使用正则或数组时，要记得使用v-bind。 即
+	```
+	<!-- 逗号分隔字符串，只有组件a与b被缓存。 -->
+	<keep-alive include="a,b">
+		<component></component>
+	</keep-alive>
+	// 正则表达式(需要使用v-bind，符合匹配规则的都会被缓存)
+	<keep-alive :include="/a|b/">
+		<component></component>
+	</keep-alive>
+	// Array(需要使用v-bind，被包含的都会被缓存)
+	<keep-alive :include="['a','b']">
+		<component></component>
+	</keep-alive>
+	```
 
 
 
