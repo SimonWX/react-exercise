@@ -1597,7 +1597,7 @@ component2.data.b // 2
 ```
 当data是一个函数时，每一个实例的data属性都是独立的，不会互相影响。这都是因为js本身的特性带来的。js本身的面向对象编程也是基于原型链和构造函数，应该会注意原型链上添加一般都是一个函数方法而不会去添加一个对象
 
-## 56、Vue面试题集锦
+## 56、Vue集锦
 1. vuex有哪几种属性？
 	* 5种。分别是State，Getter，Mutation，Action，Module
 2. vuex的state特性是？
@@ -2115,9 +2115,98 @@ function deepCopy(p, c){
 		* res.sendFile 返回文件
 		* res.sendStatus() 返回状态
 
-
-
-
+## 60、React集锦
+1. redux中间件
+	* 中间件提供第三方插件的模式，自定义拦截 action -> reducer 的过程。变为 action -> middlewares -> reducer 。这种机制可以让我们改变数据流，实现如异步 action ，action 过滤，日志输出，异常报告等功能。
+	*	常见的中间件：
+		* redux-logger：提供日志输出
+		* redux-thunk：处理异步操作
+		* redux-promise：处理异步操作，actionCreator的返回值是promise
+2. 说说redux是什么，redux有什么缺点？
+	* redux 是一个应用数据流框架，主要是解决了组件间状态共享的问题，原理是集中式管理，主要有三个核心方法，action，store，reducer，工作流程是 view 调用 store 的 dispatch 接收 action 传入 store，reducer 进行 state 操作，view 通过 store 提供的 getState 获取最新的数据，flux 也是用来进行数据操作的，有四个组成部分 action，dispatch，view，store，工作流程是 view 发出一个 action，派发器接收 action，让 store 进行数据更新，更新完成以后 store 发出 change，view 接受 change 更新视图。Redux 和 Flux 很像。主要区别在于 Flux 有多个可以改变应用状态的 store，在 Flux 中 dispatcher 被用来传递数据到注册的回调事件，但是在 redux 中只能定义一个可更新状态的 store，redux 把 store 和 Dispatcher 合并,结构更加简单清晰
+	*	新增 state,对状态的管理更加明确，通过 redux，流程更加规范了，减少手动编码量，提高了编码效率，同时缺点时当数据更新时有时候组件不需要，但是也要重新绘制，有些影响效率。一般情况下，我们在构建多交互，多数据流的复杂项目应用时才会使用它们<br/>
+	缺点：
+	* 一个组件所需要的数据，必须由父组件传过来，而不能像flux中直接从store取。
+	* 当一个组件相关数据更新时，即使父组件不需要用到这个组件，父组件还是会重新render，可能会有效率影响，或者需要写复杂的shouldComponentUpdate进行判断。
+3. react生命周期函数
+	* 一、初始化阶段：
+		* getDefaultProps:获取实例的默认属性
+		* getInitialState:获取每个实例的初始化状态
+ 		*	componentWillMount：组件即将被装载、渲染到页面上
+		* render:组件在这里生成虚拟的DOM节点
+		*	componentDidMount:组件真正在被装载之后
+	*	二、运行中状态：
+		*	componentWillReceiveProps:组件将要接收到属性的时候调用
+		*	shouldComponentUpdate:组件接受到新属性或者新状态的时候（可以返回false，接收数据后不更新，阻止render调用，后面的函数不会被继续执行了）
+		*	componentWillUpdate:组件即将更新不能修改属性和状态
+		*	render:组件重新描绘
+		*	componentDidUpdate:组件已经更新
+	*	三、销毁阶段：
+		*	componentWillUnmount:组件即将销毁
+4. react性能优化是哪个周期函数？
+	*	shouldComponentUpdate 这个方法用来判断是否需要调用render方法重新描绘dom。<br/>因为dom的描绘非常消耗性能，如果我们能在shouldComponentUpdate方法中能够写出更优化的dom diff算法，可以极大的提高性能。
+5. diff算法?
+	*	把树形结构按照层级分解，只比较同级元素。
+	* 给列表结构的每个单元添加唯一的key属性，方便比较。
+	* React 只会匹配相同 class 的 component（这里面的class指的是组件的名字）
+	* 合并操作，调用 component 的 setState 方法的时候, React 将其标记为 dirty.到每一个事件循环结束, React 检查所有标记 dirty 的 component 重新绘制.
+	*	选择性子树渲染。开发人员可以重写shouldComponentUpdate提高diff的性能。
+6. react性能优化方案
+	* 重写shouldComponentUpdate来避免不必要的dom操作。
+	*	使用 production 版本的react.js。
+	* 使用key来帮助React识别列表中所有子组件的最小变化。
+7. 简述flux思想
+	* Flux 的最大特点，就是数据的"单向流动"。
+		* 1.用户访问 View
+		* 2.View 发出用户的 Action
+		* 3.Dispatcher 收到 Action，要求 Store 进行相应的更新
+		* 4.Store 更新后，发出一个"change"事件
+		* 5.View 收到"change"事件后，更新页面
+8. 调用 setState 之后发生了什么？
+	*	在代码中调用 setState 函数之后，React 会将传入的参数对象与组件当前的状态合并，然后触发所谓的调和过程（Reconciliation）。经过调和过程，React 会以相对高效的方式根据新的状态构建 React 元素树并且着手重新渲染整个 UI 界面。在 React 得到元素树之后，React 会自动计算出新的树与老树的节点差异，然后根据差异对界面进行最小化重渲染。在差异计算算法中，React 能够相对精确地知道哪些位置发生了改变以及应该如何改变，这就保证了按需更新，而不是全部重新渲染。
+9. 为什么建议传递给 setState 的参数是一个 callback 而不是一个对象
+	*	因为 this.props 和 this.state 的更新可能是异步的，不能依赖它们的值去计算下一个 state。
+10. (在构造函数中)调用 super(props) 的目的是什么?
+	*	在 super() 被调用之前，子类是不能使用 this 的，在 ES2015 中，子类必须在 constructor 中调用 super()。传递 props 给 super() 的原因则是便于(在子类中)能在 constructor 访问 this.props。
+11. 应该在 React 组件的何处发起 Ajax 请求
+	* 在 React 组件中，应该在 componentDidMount 中发起网络请求。这个方法会在组件第一次“挂载”(被添加到 DOM)时执行，在组件的生命周期中仅会执行一次。更重要的是，你不能保证在组件挂载之前 Ajax 请求已经完成，如果是这样，也就意味着你将尝试在一个未挂载的组件上调用 setState，这将不起作用。在 componentDidMount 中发起网络请求将保证这有一个组件可以更新了。
+12. React 中 refs 的作用是什么？
+* Refs 是 React 提供给我们的安全访问 DOM 元素或者某个组件实例的句柄。我们可以为元素添加 ref 属性然后在回调函数中接受该元素在 DOM 树中的句柄，该值会作为回调函数的第一个参数返回：
+	```
+	class CustomForm extends Component {
+		handleSubmit = () => {
+			console.log("Input Value: ", this.input.value)
+		}
+		render () {
+			return (
+				<form onSubmit={this.handleSubmit}>
+					<input
+						type='text'
+						ref={(input) => this.input = input} />
+					<button type='submit'>Submit</button>
+				</form>
+			)
+		}
+	}
+	```
+	上述代码中的 input 域包含了一个 ref 属性，该属性声明的回调函数会接收 input 对应的 DOM 元素，我们将其绑定到 this 指针以便在其他的类函数中使用。另外值得一提的是，refs 并不是类组件的专属，函数式组件同样能够利用闭包暂存其值：
+	```
+	function CustomForm ({handleSubmit}) {
+		let inputElement
+		return (
+			<form onSubmit={() => handleSubmit(inputElement.value)}>
+				<input
+					type='text'
+					ref={(input) => inputElement = input} />
+				<button type='submit'>Submit</button>
+			</form>
+		)
+	}
+	```
+13. 使用箭头函数(arrow functions)的优点是什么
+	* 作用域安全：在箭头函数之前，每一个新创建的函数都有定义自身的 this 值(在构造函数中是新对象；在严格模式下，函数调用中的 this 是未定义的；如果函数被称为“对象方法”，则为基础对象等)，但箭头函数不会，它会使用封闭执行上下文的 this 值。
+	* 简单：箭头函数易于阅读和书写
+	* 清晰：当一切都是一个箭头函数，任何常规函数都可以立即用于定义作用域。开发者总是可以查找 next-higher 函数语句，以查看 this 的值
 
 
 
