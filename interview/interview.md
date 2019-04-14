@@ -703,7 +703,7 @@ function getProperty(obj, prop){
 ```
 
 ## 27、js实现数组去重
-1. 创建一个新的临时数组来保存数组中已有的元素
+* 创建一个新的临时数组来保存数组中已有的元素
 ```
 var a = new Array(1,2,2,2,2,5,3,2,9,6,3);
 Array.prototype.uniqueOne = function(){
@@ -718,7 +718,7 @@ Array.prototype.uniqueOne = function(){
 }
 console.log(`去重后的数组：${a.uniqueOne()}`)
 ```
-2. 使用哈希表存储已有的元素(该方法最快)
+* 使用哈希表存储已有的元素(该方法最快)
 ```
 Array.prototype.uniqueTwo = function(){
 	var hash = {},
@@ -732,7 +732,7 @@ Array.prototype.uniqueTwo = function(){
 	return n;
 }
 ```
-3. 使用indexOf判断数组元素第一次出现的位置是否为当前位置
+* 使用indexOf判断数组元素第一次出现的位置是否为当前位置
 ```
 Array.prototype.uniqueThree = function(){
 	var n = [this[0]];
@@ -744,7 +744,7 @@ Array.prototype.uniqueThree = function(){
 	}
 }
 ```
-4. 先排序再去重
+* 先排序再去重
 ```
 Array.prototype.uniqueFour = function(){
 	this.sort(function(a,b){
@@ -889,7 +889,7 @@ titleCase("I'm a little tea pot");
 ```
 
 ## 35、返回数组中最大的数
-* 注：其实还有一种就是for循环
+注：其实还有一种就是for循环
 ```
 function largestOfFour(arr){
 	var new_arr = [];
@@ -1069,13 +1069,13 @@ BFC，Block Formatting Context 直译为‘块级格式化上下文’<br/>
 
 ## 39、介绍下npm模块安装机制，为啥输入npm install就可以自动安装对应模块？
 1. npm模块安装机制：
-* 发出npm install 命令
-* 查询node_modules目录之中是否已经存在指定模块
-	* 若存在，不再重新安装
-	* 若不存在
-		* npm 向registry查询模块压缩包的网址
-		* 下载压缩包，存放在根目录下的.npm目录里
-		* 解压压缩包到当前项目的node_modules目录
+	* 发出npm install 命令
+	* 查询node_modules目录之中是否已经存在指定模块
+		* 若存在，不再重新安装
+		* 若不存在
+			* npm 向registry查询模块压缩包的网址
+			* 下载压缩包，存放在根目录下的.npm目录里
+			* 解压压缩包到当前项目的node_modules目录
 2. npm 实现原理<br/>
 输入npm install 命令并桥下回车后，会经历如下几个阶段（以npm 5.5.1为例）：
 	1. 执行工程自身preinstall <br/>
@@ -1118,125 +1118,125 @@ for(var i=0; i<10; i++){
 * 方法一<br/>
 	原理： 
 	* 利用setTimeout函数的第三个参数，会作为回调函数的第一个参数传入
-	* 利用bind函数部分执行的特性
-	```
-	//代码1：
-	for(var i=0; i<10; i++){
-		setTimeout(i => {
-			console.log(i);
-		},1000,i)
-	}
-	//代码2：
-	for(var i=0; i<10; i++){
-		setTimeout(
-			console.log, 1000, i
-		)
-	}
-	//代码3：
-	for(var i=0; i<10; i++){
-		setTimeout(console.log.bind(Object.create(null),i),1000)
-	}
-	```
+	* 利用bind函数部分执行的特性<br/>
+```
+//代码1：
+for(var i=0; i<10; i++){
+	setTimeout(i => {
+		console.log(i);
+	},1000,i)
+}
+//代码2：
+for(var i=0; i<10; i++){
+	setTimeout(
+		console.log, 1000, i
+	)
+}
+//代码3：
+for(var i=0; i<10; i++){
+	setTimeout(console.log.bind(Object.create(null),i),1000)
+}
+```
 * 方法二<br/>
 	原理：
 	* 利用let变量的特性---在每一次for循环的过程中，let声明的变量会在当前的块级作用域里面（for循环的body体，也即两个花括号之间的内容区域）创建一个文法环境（Lexical Environment），该环境里面包括了当前for循环过程中的i
-	```
-	//代码1：
-	for (let i=0; i<10, i++){
-		setTimeout(()=>{
-			console.log(i)
-		},1000)
-	}
-	//等价于
-	for(let i=0; i<10; i++){
-		let _i = i ; //const _i = i;
-		setTimeout(()=>{
-			console.log(_i);
-		},1000)
-	}
-	```
+```
+//代码1：
+for (let i=0; i<10, i++){
+	setTimeout(()=>{
+		console.log(i)
+	},1000)
+}
+//等价于
+for(let i=0; i<10; i++){
+	let _i = i ; //const _i = i;
+	setTimeout(()=>{
+		console.log(_i);
+	},1000)
+}
+```
 * 方法三<br/>
 	原理：
 	* 利用函数自执行的方式，把当前for循环过程中的i传递过去，构建出块级作用域。IIFE其实并不属于闭包的范畴。
 	* 利用其它方式构建出块级作用域
-	```
-	//代码1：
-	for(var i=0; i<10; i++){
-		(i=>{
-			setTimeout(()=>{
-				console.log(i);
-			},1000)
-		})(i)
+```
+//代码1：
+for(var i=0; i<10; i++){
+	(i=>{
+		setTimeout(()=>{
+			console.log(i);
+		},1000)
+	})(i)
+}
+//代码2：
+for(var i=0; i<10; i++){
+	try {
+		throw new Error(i);
+	}catch({
+		message: i
+	}){
+		setTimeout(()=>{
+			console.log(i)
+		},1000)
 	}
-	//代码2：
-	for(var i=0; i<10; i++){
-		try {
-			throw new Error(i);
-		}catch({
-			message: i
-		}){
-			setTimeout(()=>{
-				console.log(i)
-			},1000)
-		}
-	}
-	```
+}
+```
 * 方法四<br/>
 	原理：
 	* 很多其它的方案只是把console.log(i)放在一个函数里面，因为setTimeout函数的第一个参数只接受函数以及字符串，如果是js语句的话，js引擎应该会自动在该语句外面包裹一层函数
-	```
-		//代码1：
-		for(var i=0; i<10; i++){
-			setTimeout(console.log(i), 1000)
-		}
-		//代码2：
-		for(var i=0; i<10; i++){
-			setTimeout((()=>{
-				console,log(i)
-			})(),1000)
-		}
-		//代码3：
-		for(var i=0; i<10; i++){
-			setTimeout((i=>{
-				console.log(i);
-			})(i),1000)
-		}
-		//代码4：
-		for(var i=0; i<10; i++){
-			setTimeout((i=>{
-				console.log(i)
-			}).call(Object.create(null),i),1000)
-		}
-		//代码5:
-		for(var i=0;i<10;i++){
-			setTimeout((i)=>{
-				console.log(i)
-			}).apply(Object.create(null),[i]), 1000)
-		}
-		//代码6:
-		for(var i=0; i<10; i++){
-			setTimeout((i=>{
-				console.log(i)
-			}).apply(Object.create(null), {length:1, '0':i}),1000)
-		}
-	```
-* 方法五<br/>
-	原理：
-	* 利用eval或者new Function执行字符串，然后执行过程同方法四代码1：
-	```
+```
 	//代码1：
 	for(var i=0; i<10; i++){
-		setTimeout(eval('console.log(i)'),1000)
+		setTimeout(console.log(i), 1000)
 	}
 	//代码2：
 	for(var i=0; i<10; i++){
-		setTimeout(new Function('i','console.log(i)')(i),1000)
+		setTimeout((()=>{
+			console,log(i)
+		})(),1000)
 	}
 	//代码3：
 	for(var i=0; i<10; i++){
-		setTimeout(new Function('console.log(i)')(),1000)
+		setTimeout((i=>{
+			console.log(i);
+		})(i),1000)
 	}
-	```
+	//代码4：
+	for(var i=0; i<10; i++){
+		setTimeout((i=>{
+			console.log(i)
+		}).call(Object.create(null),i),1000)
+	}
+	//代码5:
+	for(var i=0;i<10;i++){
+		setTimeout((i)=>{
+			console.log(i)
+		}).apply(Object.create(null),[i]), 1000)
+	}
+	//代码6:
+	for(var i=0; i<10; i++){
+		setTimeout((i=>{
+			console.log(i)
+		}).apply(Object.create(null), {length:1, '0':i}),1000)
+	}
+```
+* 方法五<br/>
+	原理：
+	* 利用eval或者new Function执行字符串，然后执行过程同方法四代码1：
+```
+//代码1：
+for(var i=0; i<10; i++){
+	setTimeout(eval('console.log(i)'),1000)
+}
+//代码2：
+for(var i=0; i<10; i++){
+	setTimeout(new Function('i','console.log(i)')(i),1000)
+}
+//代码3：
+for(var i=0; i<10; i++){
+	setTimeout(new Function('console.log(i)')(),1000)
+}
+```
 
 ## 43、Vue的响应式原理中Object.defineProperty有什么缺陷？为什么在Vue3.0采用了Proxy，抛弃了Object.defineProperty?
 1. Object.defineProperty无法监控到数组下标的变化，导致通过数组下标添加元素，不能实时响应。
@@ -1291,6 +1291,7 @@ for(var i=0; i<10; i++){
 		})
 	})
 	```
+
 2. Promise<br/>
 Promise就是为了解决callback的问题而产生的。
 Promise实现了链式调用，也就是说每次then后返回的都是一个全新的Promise，如果我们在then中return，return的结果会被Promise.resolve()包装
@@ -1310,7 +1311,7 @@ Promise实现了链式调用，也就是说每次then后返回的都是一个全
 	* 缺点：无法取消promise，错误需要通过回调函数来捕获
 
 3. Generator<br/>
-特点：可以控制函数的执行，可以配合co函数库使用
+	特点：可以控制函数的执行，可以配合co函数库使用
 	```
 	function *fetch(){
 		yield ajax('xxx1', () => {})
@@ -1322,6 +1323,7 @@ Promise实现了链式调用，也就是说每次then后返回的都是一个全
 	let result2 = it.next()
 	let result3 = it.next()
 	```
+
 4. Async/await<br/>
 	async，await是异步的终极解决方案
 	* 优点：代码清晰，不用像Promise写一大堆then链，处理了回调地狱的问题
@@ -1389,7 +1391,7 @@ m|多行
 
 #### 字符缩写
 简写|作用
--|-
+-------- | --------
 \w|匹配字母数字或下划线。等价于“[A-Za-z0-9_]”。
 \W|匹配任何非单词字符。等价于“[^A-Za-z0-9_]”。
 \s|匹配任意的空白字符。包括空格、制表符、换页符等等。等价于[ \f\n\r\t\v]。
@@ -1401,13 +1403,13 @@ m|多行
 
 #### 常用正则表达式
 使用场景|对应正则表达式
--|-
+-------- | --------
 用户名|/^[a-z0-9_-]{3,16}$/
 密码|/^[a-z0-9_-]{6,18}$/
 十六进制值|/^#?[a-f0-9]{6}|[a-f0-9]{3})$/
 电子邮箱|/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/  或者  /^[a-z\d]+(\.[a-z\d]+)*@([\da-z](-[\da-z])?)+(\.{1,2}[a-z]+)+$/
 URL|/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/
-删除代码\\\注释|(?<!http:\|\S)//.*$
+删除代码\\\注释|(?\<\!http:\|\S)//.*$
 
 ## 48、Proxy
 Proxy是ES6中新增的功能，可以用来自定义对象中的操作
@@ -1620,8 +1622,8 @@ component2.data.b // 2
 	* MVVM是Model-View-ViewModel的缩写。MVVM是一种设计思想。Model层代表数据模型，也可以在Model中定义数据修改和操作的业务逻辑，View代表UI组件，它负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。
 	* 在MVVM架构下，View和Model之间并没有直接的联系，而是通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反映到view上。
 	* ViewModel通过双向数据绑定把View层和Model层连接起来，而View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注业务逻辑，不需手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全由MVVM来统一管理。
-8. \<keep-alive>\</keep-alive>的作用是什么？
-	* \<keep-alive>\</keep-alive>包裹动态组件时，会缓存不活动的组件实例，主要用于保留组件状态或避免重新渲染。
+8. `<keep-alive>\</keep-alive>`的作用是什么？
+	* `<keep-alive>\</keep-alive>`包裹动态组件时，会缓存不活动的组件实例，主要用于保留组件状态或避免重新渲染。
 	* 在vue 2.1.0版本之后，keep-alive新加入两个属性，include（包含的组件缓存）与exclude（排除的组件不缓存，优先级大于include）。
 	```
 	<keep-alive include="include_components" exclude="exclude_components">
@@ -1630,10 +1632,12 @@ component2.data.b // 2
 		</component>
 	</keep-alive>
 	```
+
 	参数解释
 	* include - 字符串货正则表达式，只有名称匹配的组件会被缓存
 	* exclude - 字符串或正则表达式，任何名称匹配的组件都不会被缓存
 	* include和exclude的属性允许组件有条件的缓存。二者都可以用','分隔字符串，正则表达式，数组。当使用正则或数组时，要记得使用v-bind。 即
+	
 	```
 	<!-- 逗号分隔字符串，只有组件a与b被缓存。 -->
 	<keep-alive include="a,b">
@@ -1684,7 +1688,7 @@ component2.data.b // 2
 	* 防御方法：
 		* 将cookie等敏感信息设置为httponly，禁止JavaScript通过document.cookie获得
 		* 对所有的输入做严格的校验尤其是在服务器端，过滤掉任何非法输入，比如手机号必须是数字，通常可采用正则表达式
-		* 净化和过滤掉不必要的html标签。比如：\<iframe>，alt， \<script>等
+		* 净化和过滤掉不必要的html标签。比如：iframe，alt， script等
 		* 净化和过滤掉不必要的JavaScript的事件标签，比如：onclick， onfocus等
 		* 转义单引号，双引号，尖括号等特殊字符，可以采用htmlencode编码，或者过滤掉这些特殊字符
 		* 设置浏览器的安全设置来防范典型的XSS注入
@@ -1872,45 +1876,53 @@ function deepCopy(p, c){
 			}
 		)
 	```
+
 2. 如何避免回调地狱
 	* 模块化：将回调函数分割为独立的函数
 	* 使用promises
 	* 使用yield
+
 3. Promise的resolve方法能传递几个参数给then方法的参数？
 	* 1个
+
 4. 为什么要用node?
 	* 总结起来node有以下几个特点：简单强大，轻量可扩展。简单体现在node使用的是JavaScript，json来进行编码，学习成本低。强大体现在非阻塞IO，可以适应分块传递数据，较慢的网络环境，尤其擅长高并发访问，轻量体现在node本身即是代码，又是服务器，前后端使用统一语言，可扩展体现在可以轻松应对多实例，多服务器架构，同时有海量的第三方应用组件。
+
 5. node有哪些核心模块?
 	* EventEmitter 
 	* stream 
 	* fs 
 	* net
 	* 全局对象（process，console，Buffer，exports）
+
 6. node的架构是什么样子？
 	* 主要分为三层，应用app > V8及node内置架构 > 操作系统 .
 	* V8是node运行的环境，可以理解为node虚拟机。
 	* node内置架构又可分为三层： 核心模块（js实现） > c++绑定 > libuv + CAes + http
+
 7. node中的Buffer如何应用？
 	* buffer是用来处理二进制数据的，比如图片，mp3，数据库文件等。
 	* buffer支持各种编码解码，二进制字符互转
+
 8. EventEmitter
 	* 1、什么是EventEmitter?
 	* 参考答案: EventEmitter是node中一个实现观察者模式的类，主要功能是监听和发射消息，用于处理多模块交互问题.
 	* 2、如何实现一个EventEmitter?
 	* 参考答案: 主要分三步：定义一个子类，调用构造函数，继承EventEmitter
-		```
-		var util = require('util');
-		var EventEmitter = require('events').EventEmitter;
-		function MyEmitter() {
-				EventEmitter.call(this);
-		} // 构造函数
-		util.inherits(MyEmitter, EventEmitter); // 继承
-		var em = new MyEmitter();
-		em.on('hello', function(data) {
-				console.log('收到事件hello的数据:', data);
-		}); // 接收事件，并打印到控制台
-		em.emit('hello', 'EventEmitter传递消息真方便!');
-		```
+	```
+	var util = require('util');
+	var EventEmitter = require('events').EventEmitter;
+	function MyEmitter() {
+			EventEmitter.call(this);
+	} // 构造函数
+	util.inherits(MyEmitter, EventEmitter); // 继承
+	var em = new MyEmitter();
+	em.on('hello', function(data) {
+			console.log('收到事件hello的数据:', data);
+	}); // 接收事件，并打印到控制台
+	em.emit('hello', 'EventEmitter传递消息真方便!');
+	```
+
 	* 3、EventEmitter有哪些典型应用?
 	* 参考答案: 1) 模块间传递消息 2) 回调函数内外传递消息 3) 处理流数据，因为流是在EventEmitter基础上实现的. 4) 观察者模式发射触发机制相关应用
 	*	4、怎么捕获EventEmitter的错误事件?
@@ -1929,8 +1941,10 @@ function deepCopy(p, c){
 					emitter2.emit('error', '错误事件来自emitter2');
 			});
 		```
+
 	* 5、EventEmitter中的newListenser事件有什么用处?
 	* 参考答案: newListener可以用来做事件机制的反射，特殊应用，事件管理等．当任何on事件添加到EventEmitter时，就会触发newListener事件，基于这种模式，我们可以做很多自定义处理.
+
 		```
 		//代码演示
 		var emitter3 = new MyEmitter();
@@ -1943,6 +1957,7 @@ function deepCopy(p, c){
 				console.log('hello　node');
 		});
 		```
+
 9. Stream
 	*	1、什么是Stream?
 	* 参考答案: stream是基于事件EventEmitter的数据管理模式．由各种不同的抽象接口组成，主要包括可写，可读，可读写，可转换等几种类型．
@@ -1956,6 +1971,7 @@ function deepCopy(p, c){
 	* 参考答案: Readable为可被读流，在作为输入数据源时使用；Writable为可被写流,在作为输出源时使用；Duplex为可读写流,它作为输出源接受被写入，同时又作为输入源被后面的流读出．Transform机制和Duplex一样，都是双向流，区别时Transfrom只需要实现一个函数_transfrom(chunk, encoding, callback);而Duplex需要分别实现_read(size)函数和_write(chunk, encoding, callback)函数.
 	*	6、实现一个Writable Stream?
 	* 参考答案: 三步走:1)构造函数call Writable 2)　继承Writable 3) 实现_write(chunk, encoding, callback)函数
+		
 		```
 		//代码演示
 		var Writable = require('stream').Writable;
@@ -1970,6 +1986,7 @@ function deepCopy(p, c){
 		};
 		process.stdin.pipe(new MyWritable()); // stdin作为输入源，MyWritable作为输出源 
 		```
+		
 10. 文件系统
 	* 1、内置的fs模块架构是什么样子的?
 	* 参考答案: fs模块主要由下面几部分组成: 1) POSIX文件Wrapper,对应于操作系统的原生文件操作 2) 文件流 fs.createReadStream和fs.createWriteStream 3) 同步文件读写,fs.readFileSync和fs.writeFileSync 4) 异步文件读写, fs.readFile和fs.writeFile
@@ -1985,13 +2002,16 @@ function deepCopy(p, c){
 	* 2、node是怎样支持https,tls的?
 	* 参考答案: 主要实现以下几个步骤即可: 1) openssl生成公钥私钥 2) 服务器或客户端使用https替代http 3) 服务器或客户端加载公钥私钥证书
 	* 3、实现一个简单的http服务器?
-	* 参考答案: 经典又很没毛意义的一个题目．思路是加载http模块，创建服务器，监听端口.<br/>
-		`var http = require('http'); // 加载http模块`<br/>
-    `http.createServer(function(req, res) {`<br/>
-        `res.writeHead(200, {'Content-Type': 'text/html'}); // 200代表状态成功, 文档类型是给浏览器识别用的`<br/>
-        `res.write(); // 返回给客户端的html数据`<br/>
-        `res.end(); // 结束输出流`<br/>
-    `}).listen(3000); // 绑定3ooo, 查看效果请访问 http://localhost:3000`<br/>
+	* 参考答案: 经典又很没毛意义的一个题目．思路是加载http模块，创建服务器，监听端口.
+		
+		```
+		var http = require('http'); // 加载http模块
+    http.createServer(function(req, res) {
+        res.writeHead(200, {'Content-Type': 'text/html'}); // 200代表状态成功, 文档类型是给浏览器识别用的
+        res.write(); // 返回给客户端的html数据
+        res.end(); // 结束输出流
+    }).listen(3000); // 绑定3ooo, 查看效果请访问 http://localhost:3000
+		```
 		
 12. node高级话题(异步，部署，性能调优，异常调试等)
 	*	1、node中的异步和同步怎么理解
@@ -2019,6 +2039,7 @@ function deepCopy(p, c){
 	*	参考答案: exec可以用操作系统原生的方式执行各种命令，如管道 cat ab.txt | grep hello; execFile是执行一个文件; spawn是流式和操作系统进行交互; fork是两个node程序(javascript)之间时行交互.
 	*	3、实现一个简单的命令行交互程序?
 	* 参考答案: 那就用spawn吧.
+		
 		```
 		//代码演示
 		var cp = require('child_process');
@@ -2026,8 +2047,10 @@ function deepCopy(p, c){
 		child.stdout.pipe(process.stdout); // child.stdout是输入流，process.stdout是输出流
 		// 这句的意思是将子进程的输出作为当前程序的输入流，然后重定向到当前程序的标准输出，即控制台
 		```
+
 	* 4、两个node程序之间怎样交互?
 	*	参考答案: 用fork嘛，上面讲过了．原理是子程序用process.on, process.send，父程序里用child.on,child.send进行交互.
+		
 		```
 		// 代码演示
 		// 1) fork-parent.js
@@ -2043,6 +2066,7 @@ function deepCopy(p, c){
 				process.send("我不要关怀，我要银民币！");
 		});
 		```	
+
  	* 5、怎样让一个js文件变得像linux命令一样可执行?
 	* 参考答案: 1) 在myCommand.js文件头部加入 #!/usr/bin/env node 2) chmod命令把js文件改为可执行即可 3) 进入文件目录，命令行输入myComand就是相当于node myComand.js了
 	* 6、child-process和process的stdin,stdout,stderror是一样的吗?
@@ -2050,20 +2074,25 @@ function deepCopy(p, c){
 14. 常用知名第三方类库(Async, Express等)
 	*	1、async都有哪些常用方法，分别是怎么用?
 	* 参考答案: async是一个js类库，它的目的是解决js中异常流程难以控制的问题．async不仅适用在node.js里，浏览器中也可以使用． 1) async.parallel并行执行完多个函数后，调用结束函数
+		
 		```
 		async.parallel([
 				function(){ ... },
 				function(){ ... }
 		], callback);
 		```	
+
 	*	2、async.series串行执行完多个函数后，调用结束函数
+		
 		```
 		async.series([
 			function(){ ... },
 			function(){ ... }
 		]);
 		```
+
 	* 3、async.waterfall依次执行多个函数，后一个函数以前面函数的结果作为输入参数
+		
 		```
 		async.waterfall([
 				function(callback) {
@@ -2081,18 +2110,23 @@ function deepCopy(p, c){
 				// result now equals 'done' 
 		});
 		```
+
 	*	4、async.map异步执行多个数组，返回结果数组
+		
 		```
 		async.map(['file1','file2','file3'], fs.stat, function(err, results){
 				// results is now an array of stats for each file 
 		});
 		```
+
 	*	5、async.filter异步过滤多个数组，返回结果数组
+		
 		```
 		async.filter(['file1','file2','file3'], fs.exists, function(results){
 				// results now equals an array of the existing files 
 		});
 		```
+
 	*	6、express项目的目录大致是什么样子的
 	* 参考答案: app.js, package.json, bin/www, public, routes, views.
 	*	7、express常用函数
@@ -2165,8 +2199,9 @@ function deepCopy(p, c){
 	*	在 super() 被调用之前，子类是不能使用 this 的，在 ES2015 中，子类必须在 constructor 中调用 super()。传递 props 给 super() 的原因则是便于(在子类中)能在 constructor 访问 this.props。
 11. 应该在 React 组件的何处发起 Ajax 请求
 	* 在 React 组件中，应该在 componentDidMount 中发起网络请求。这个方法会在组件第一次“挂载”(被添加到 DOM)时执行，在组件的生命周期中仅会执行一次。更重要的是，你不能保证在组件挂载之前 Ajax 请求已经完成，如果是这样，也就意味着你将尝试在一个未挂载的组件上调用 setState，这将不起作用。在 componentDidMount 中发起网络请求将保证这有一个组件可以更新了。
-12. React 中 refs 的作用是什么？
-* Refs 是 React 提供给我们的安全访问 DOM 元素或者某个组件实例的句柄。我们可以为元素添加 ref 属性然后在回调函数中接受该元素在 DOM 树中的句柄，该值会作为回调函数的第一个参数返回：
+12. React 中 refs 的作用是什么？<br/>
+	Refs 是 React 提供给我们的安全访问 DOM 元素或者某个组件实例的句柄。我们可以为元素添加 ref 属性然后在回调函数中接受该元素在 DOM 树中的句柄，该值会作为回调函数的第一个参数返回：
+	
 	```
 	class CustomForm extends Component {
 		handleSubmit = () => {
@@ -2184,7 +2219,9 @@ function deepCopy(p, c){
 		}
 	}
 	```
+
 	上述代码中的 input 域包含了一个 ref 属性，该属性声明的回调函数会接收 input 对应的 DOM 元素，我们将其绑定到 this 指针以便在其他的类函数中使用。另外值得一提的是，refs 并不是类组件的专属，函数式组件同样能够利用闭包暂存其值：
+	
 	```
 	function CustomForm ({handleSubmit}) {
 		let inputElement
@@ -2198,10 +2235,11 @@ function deepCopy(p, c){
 		)
 	}
 	```
+
 13. 使用箭头函数(arrow functions)的优点是什么
-	* 作用域安全：在箭头函数之前，每一个新创建的函数都有定义自身的 this 值(在构造函数中是新对象；在严格模式下，函数调用中的 this 是未定义的；如果函数被称为“对象方法”，则为基础对象等)，但箭头函数不会，它会使用封闭执行上下文的 this 值。
-	* 简单：箭头函数易于阅读和书写
-	* 清晰：当一切都是一个箭头函数，任何常规函数都可以立即用于定义作用域。开发者总是可以查找 next-higher 函数语句，以查看 this 的值
+	1. 作用域安全：在箭头函数之前，每一个新创建的函数都有定义自身的 this 值(在构造函数中是新对象；在严格模式下，函数调用中的 this 是未定义的；如果函数被称为“对象方法”，则为基础对象等)，但箭头函数不会，它会使用封闭执行上下文的 this 值。
+	2. 简单：箭头函数易于阅读和书写
+	3. 清晰：当一切都是一个箭头函数，任何常规函数都可以立即用于定义作用域。开发者总是可以查找 next-higher 函数语句，以查看 this 的值
 
 
 
