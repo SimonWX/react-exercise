@@ -1652,15 +1652,217 @@ component2.data.b // 2
 		<component></component>
 	</keep-alive>
 	```
+9. vue常用的修饰符？
+	* .prevent 提交事件不在重载页面。调用event.preventDefault()
+	* .stop 阻止单击事件冒泡。调用event.stopPropagation()
+	* .self 当事件发生在该元素本身而不是子元素的时候触发回调
+	* .capture 事件侦听，事件发生时候调用。
+	* .native 监听组件根元素的原生事件
+	* .once 只触发一次回调
+	* .left （2.2.0）只当点击鼠标左键时触发
+	* .right （2.2.0）只当点击鼠标右键时触发
+	* .middle （2.2.0）只当点击鼠标中键时触发
+	* .passive （2.3.0）以{passive: true} 模式添加侦听器
+10. vue中key值的作用？
+	* 当vue.js用v-for正在更新已渲染过的元素列表是，它默认用'就地复用'策略。如果数据项的顺序被改变，vue将不会移动DOM元素来匹配数据项的顺序，而是简单复用此处的每个元素。并且确保它在特定索引下显示已被渲染过的每个元素。key的作用主要是为了高效的更新虚拟DOM。
+11. 什么是vue的计算属性？
+	* 在模板中放入太多的逻辑会让模板过重难以维护，在需要对数据进行复杂处理，且可能多次使用的情况下，尽量采取计算属性的方式。好处:
+	1. 使得数据处理结构清晰
+	2. 依赖于数据，数据更新，处理结果自动更新。
+	3. 计算属性内部this指向vm实例。
+	4. 在template调用时，直接写计算属性名即可
+	5. 常用的是getter方法，获取数据，也可以使用set方法改变数据
+	6. 相较于methods，不管依赖的数据变不变，methods都会重新计算，但是依赖数据不变的时候computed从缓存中获取，不会重新计算。
+12. vue等单页面应用及其优缺点
+	* 优点：vue的目标是通过尽可能简单的api实现响应的数据绑定和组合的视图组件，核心是一个响应的数据绑定系统。MVVM，数据驱动，组件化，轻量，简洁，高效，快速，模块友好。
+	* 缺点：不支持低版本浏览器，最低只支持IE9，不利于SEO优化（如果要支持SEO，建议通过服务端来进行渲染组件）第一次加载首页耗时相对长一些，不可以使用浏览器的导航按钮需要自行实现前进后退。
+13. vue的路由实现：hash模式和history模式
+	* hash模式: 在浏览器中符号'#',#以及#以后的字符称之为hash，用window.location.hash读取。特点：hash虽然在url中，但不被包括在http请求中，用来指导浏览器动作，对服务端安全无用，，hash不会重加载页面。
+	* history模式：history采用html5的新特性，且提供了两个新方法：pushState()， replaceState()可以对浏览器历史记录栈进行修改，以及popState事件的监听到状态变更。
 
+##  57、理解web安全吗？都有哪几种，介绍以及如何预防
+1. XSS，即跨站脚本注入
+	攻击方法：
+	* 手动攻击：编写注入脚本，比如`<script>alert(document.cookie())</script>`。手动测试目标网站上有的input，textarea等所有可能输入文本信息的区域
+	* 自动攻击：利用工具扫描目标网站所有的网页并自动测试写好的注入脚本，比如：Burpsuite等
+	* 防御方法：
+		* 将cookie等敏感信息设置为httponly，禁止JavaScript通过document.cookie获得
+		* 对所有的输入做严格的校验尤其是在服务器端，过滤掉任何非法输入，比如手机号必须是数字，通常可采用正则表达式
+		* 净化和过滤掉不必要的html标签。比如：\<iframe>，alt， \<script>等
+		* 净化和过滤掉不必要的JavaScript的事件标签，比如：onclick， onfocus等
+		* 转义单引号，双引号，尖括号等特殊字符，可以采用htmlencode编码，或者过滤掉这些特殊字符
+		* 设置浏览器的安全设置来防范典型的XSS注入
+2. SQL注入
+	攻击方法：
+	* 编写恶意字符串，比如'or 1==1--'等
+	* 手动测试目标网站上所有涉及数据库操作的地方
+	* 防御方法：
+		* 禁止目标网站利用动态拼接字符串的方式访问数据库
+		* 减少不必要的数据库抛出的错误信息
+		* 对数据库的操作赋予严格的权限控制
+		* 净化和过滤掉不必要的SQL保留字，比如：where，or，exec等
+		* 转义单引号，双引号，尖括号等特殊字符。可以采用htmlencode编码，过滤掉这些特殊字符
+3. CSRF，也就是跨站请求伪造
+	即攻击者冒用用户名义，向目标站点发送请求，
+	* 防范方法
+		* 在客户端进行cookie的hashing，并在服务端进行hash认证，
+		* 提交请求是需要填写验证码
+		* 使用one-time tokens为不同的表单创建不同的伪随机值
 
-
-
-
-
-
-
-
+## 58、JS继承方式
+JS不是传统的面向对象语言，那么是如何实现继承的呢？由于JS是基于原型链实现的面向对象，所以JS主要是通过原型链查找来实现继承，主要有两大类实现方式，分为基于构造函数的继承，以及非构造函数的继承。
+```
+// 现在有两个类既构造函数，一个是动物类
+function Animal() {
+	this.species = '动物';
+}
+// 一个是猫类
+function Cat(name, color){
+	this.name = name;
+	this.color = color;
+}
+```
+怎么才能使‘猫’继承‘动物’的特性呢？<br/>
+#### 一、构造函数绑定
+这种方法是最简单的方法，使用call或apply方法，将父对象的构造函数绑定在子对象上，即在子对象构造函数中加一行：
+```
+function Cat (name, color){
+	Animal.apply(this, arguments);
+	this.name = name;
+	this.color = color;
+}
+var cat1 = new Cat('大毛', '黄色');
+alert(cat1.species) // 动物
+```
+#### 二、prototype模式
+该方法更常见，使用prototype属性。
+如果'猫'的prototype对象，指向一个Animal的实例，那么所有'猫'的实例，就能继承Animal了。
+```
+Cat.prototype = new Animal();
+Cat.prototype.constructor = Cat;
+var cat1 = new Cat('大毛', '黄色');
+alert(cat1.species); // 动物
+```
+第一行，我们将cat的prototype对象指向一个Animal的实例。它相当于完全删除了prototype对象原先的值，然后赋予一个新值。第二行，任何一个prototype对象都有一个constructor属性，指向它的构造函数，如果没有'Cat.prototype = new Animal()' 这一行，Cat.prototype.constructor是指向Cat的，加上这一行以后，指向Animal。更重要的是，每一个实例也有一个constructor属性，默认调用prototype对象的constructor属性。因此，在运行'Cat.prototype = new Animal()'这一行之后，cat1.constructor也指向Animal。这显然会导致继承链的紊乱(cat1明明是用构造函数Cat生成的)，因此我们必须手动纠正，将Cat.prototype对象的constructor值改为Cat。这是第二行的作用。如果替换了prototype对象，那么，下一步必然是为新的prototype对象加上constructor属性，并将这个属性指回原来的构造函数。
+#### 三、直接继承prototype
+第三种方法是对第二种方法的改进。由于Animal对象中，不变的属性都可以直接写入Animal.prototype。所以，我们也可以让Cat()跳过Animal()，直接继承Animal.prototype。现在我们将Animal对象改写。
+```
+function Animal(){
+	Animal.prototype.species = '动物';
+}
+```
+然后，将Cat的prototype对象，然后指向Animal的prototype对象，这样就完成了继承。
+```
+Cat.prototype = Animal.prototype;
+Cat.prototype.constructor = Cat;
+var cat1 = new Cat('大毛','黄色');
+alert(cat1.species); // 动物
+```
+与前一种方法相比，这样做的优点是效率比较高（不用执行和建立Animal的实例了），比较省内存。缺点是 Cat.prototype和Animal.prototype现在指向了同一个对象，那么任何对Cat.prototype的修改，都会反映到Animal.prototype。
+所以，上面这一段代码其实是有问题的。请看第二行
+```
+Cat.prototype.constructor = Cat;
+// 这一句实际上把Animal.prototype对象的constructor属性也改掉了！
+alert(Animal.prototype.constructor); // Cat
+```
+#### 四、利用空对象作为中介
+由于"直接继承prototype"存在上述的缺点，所以就有第四种方法，利用一个空对象作为中介。
+```
+var F = function() {};　　
+F.prototype = Animal.prototype;　　
+Cat.prototype = new F();　　
+Cat.prototype.constructor = Cat;
+```
+F是空对象，所以几乎不占内存。这时，修改Cat的prototype对象，就不会影响到Animal的prototype对象。
+```
+alert(Animal.prototype.constructor); // Animal
+```
+我们将上面的方法，封装成一个函数，便于使用。
+```
+function extend(Child, Parent) {
+    var F = function() {};　　　　
+    F.prototype = Parent.prototype;　　　　
+    Child.prototype = new F();　　　　
+    Child.prototype.constructor = Child;　　　　
+    Child.uber = Parent.prototype;　　
+}
+```
+使用的时候，方法如下
+```
+extend(Cat, Animal);　　
+var cat1 = new Cat("大毛", "黄色");　　
+alert(cat1.species); // 动物
+```
+这个extend函数，就是YUI库如何实现继承的方法。
+另外，说明一点，函数体最后一行
+```
+Child.uber = Parent.prototype;
+```
+意思是为子对象设一个uber属性，这个属性直接指向父对象的prototype属性。（uber是一个德语词，意思是"向上"、"上一层"。）这等于在子对象上打开一条通道，可以直接调用父对象的方法。这一行放在这里，只是为了实现继承的完备性，纯属备用性质。
+#### 五、拷贝继承
+上面是采用prototype对象，实现继承。我们也可以换一种思路，纯粹采用"拷贝"方法实现继承。简单说，如果把父对象的所有属性和方法，拷贝进子对象，不也能够实现继承吗？这样我们就有了第五种方法。<br/>
+首先，还是把Animal的所有不变属性，都放到它的prototype对象上。
+```
+function Animal() {}　　
+Animal.prototype.species = "动物";
+```
+然后，再写一个函数，实现属性拷贝的目的。
+```
+function extend2(Child, Parent) {　　　　
+    var p = Parent.prototype;　　　　
+    var c = Child.prototype;　　　　
+    for(var i in p) {　　　　　　
+        c[i] = p[i];　　　　　　
+    }　　　　
+    c.uber = p;　　
+}
+```
+这个函数的作用，就是将父对象的prototype对象中的属性，一一拷贝给Child对象的prototype对象。
+使用的时候，这样写：
+```
+extend2(Cat, Animal);　　
+var cat1 = new Cat("大毛", "黄色");　　
+alert(cat1.species); // 动物
+```
+---------------------------
+### 下面是非构造函数的继承模式
+#### 六、Object()方法
+json格式的发明人，提出了一个object()函数，可以做到这一点。
+```
+function object(o){
+	function F(){}
+	F.prototype = o;
+	return new F();
+}
+```
+#### 七、浅拷贝
+除了使用‘prototype链’以外，还有另一种思路：把父对象的属性，全部拷贝给子对象，也能实现继承。
+```
+function extendCopy(p){
+	var c = {};
+	for(var i in p){
+		c[i] = p[i];
+	}
+	c.uber = p;
+	return c;
+}
+```
+#### 八、深拷贝
+所谓'深拷贝'，就是能够实现真正意义上的数组和对象的拷贝。它的实现并不难，只要递归调用'浅拷贝'就可以了。
+```
+function deepCopy(p, c){
+	var c = c || {};
+	for(var i in p){
+		if(typeof p[i] === 'object'){
+			c[i] = (p[i].constructor === Array) ? [] : {};
+			deepCopy(p[i], c[i]);
+		}else{
+			c[i] = p[i]
+		}
+	}
+	return c;
+}
+```
 
 
 
