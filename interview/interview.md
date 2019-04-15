@@ -214,30 +214,30 @@ if(!Function.prototype.bind){
 // 声明一个变量，用来实例化XMLHttpRequest对象
 var xmlhttp = null; 
 if(window.XMLHttpRequest){
- // 新版本的浏览器可以直接创建XMLHttpRequest对象
- xmlhttp = new XMLHttpRequest(); 
+  // 新版本的浏览器可以直接创建XMLHttpRequest对象
+  xmlhttp = new XMLHttpRequest(); 
 }else if(window.ActiveXObject){
- //IE5或IE6没有XMLHttpRequest对象，而是用ActiveXObject对象
- xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); 
+  //IE5或IE6没有XMLHttpRequest对象，而是用ActiveXObject对象
+  xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); 
 }
 if(xmlhttp != null){
- // 指定响应函数为state_Change
- xmlhttp.onreadystatechange = state_Change; 
- //指定请求,这里要访问在/example/xdom路径下的note.xml文件,true代表使用的是异步请求
- xmlhttp.open('GET','example/xdom/note.xml',true); 
- xmlhttp.send(null); // 发送请求
+  // 指定响应函数为state_Change
+  xmlhttp.onreadystatechange = state_Change; 
+  //指定请求,这里要访问在/example/xdom路径下的note.xml文件,true代表使用的是异步请求
+  xmlhttp.open('GET','example/xdom/note.xml',true); 
+  xmlhttp.send(null); // 发送请求
 }else{
- alert('Your brower does not support XMLHTTP');
+  alert('Your brower does not support XMLHTTP');
 }
 // 创建具体的响应函数 state_Change
 function state_Change(){
- if(xmlhttp.readyState==4){
-  if(xmlhttp.status == 200){
-   // 这里写函数具体逻辑
-  }else{
-   alert('Problem retrieving XML data');
+  if(xmlhttp.readyState==4){
+    if(xmlhttp.status == 200){
+    // 这里写函数具体逻辑
+    }else{
+      alert('Problem retrieving XML data');
+    }
   }
- }
 }
 ```
 
