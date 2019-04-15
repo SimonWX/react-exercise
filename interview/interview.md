@@ -184,23 +184,23 @@ delegateEvent(odiv, 'a', click, function(){
 ## 5、手写Function.bind 函数(腾讯, 爱奇艺)
 ```
 if(!Function.prototype.bind){
-	Function.prototype.bind = function(oThis){
-		if(typeof this !== 'Function'){ // 如果不是函数抛出异常
-			throw new TypeError('')
-		}
-		var aArgs = Array.prototype.slice.call(arguments, 1), // 此处的aArgs是除函数外的参数
-				fToBind = this, // 要绑定的对象
-				fNOP = function(){},
-				fBound = function(){
-					return fToBind.apply(
-						this instanceof fNOP ? this : 
-						oThis || this, aArgs.concat(Array.prototype.slice.call(arguments))
-					)
-				};
-		fNOP.prototype = this.prototype;
-		fBound.prototype = new fNOP();
-		return fBound;
-	}
+ Function.prototype.bind = function(oThis){
+  if(typeof this !== 'Function'){ // 如果不是函数抛出异常
+   throw new TypeError('')
+  }
+  var aArgs = Array.prototype.slice.call(arguments, 1), // 此处的aArgs是除函数外的参数
+  fToBind = this, // 要绑定的对象
+  fNOP = function(){},
+  fBound = function(){
+   return fToBind.apply(
+    this instanceof fNOP ? this : 
+    oThis || this, aArgs.concat(Array.prototype.slice.call(arguments))
+   )
+  };
+  fNOP.prototype = this.prototype;
+  fBound.prototype = new fNOP();
+  return fBound;
+ }
 }
 ```
 
@@ -211,7 +211,8 @@ if(!Function.prototype.bind){
 * 发送请求
 * 创建响应函数
 ```
-var xmlhttp = null; // 声明一个变量，用来实例化XMLHttpRequest对象
+// 声明一个变量，用来实例化XMLHttpRequest对象
+var xmlhttp = null; 
 if(window.XMLHttpRequest){
  // 新版本的浏览器可以直接创建XMLHttpRequest对象
  xmlhttp = new XMLHttpRequest(); 
@@ -222,7 +223,7 @@ if(window.XMLHttpRequest){
 if(xmlhttp != null){
  // 指定响应函数为state_Change
  xmlhttp.onreadystatechange = state_Change; 
- // 指定请求,这里要访问在/example/xdom路径下的note.xml文件,true代表使用的是异步请求
+ //指定请求,这里要访问在/example/xdom路径下的note.xml文件,true代表使用的是异步请求
  xmlhttp.open('GET','example/xdom/note.xml',true); 
  xmlhttp.send(null); // 发送请求
 }else{
