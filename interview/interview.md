@@ -1,67 +1,71 @@
 # *Interview Collection For FE/JavaScript*
 
 ## 1、手写一个js的深克隆 （美团，爱奇艺）
+
 ```
 function deepCopy(obj){
-	// 判断是否是简单数据类型
-	if(typeof obj == 'object'){
-		// 复杂数据类型
-		var result = obj.constructor == Array ? [] ： {};
-		for (let i in obj){
-			result[i] = typeof obj[i] == 'object' ? deepCopy(obj[i]) : obj[i];
-		}	
-	}else{
-		// 简单数据类型 直接 == 赋值
-		var  result = obj;
-	}
-	return result;
+ // 判断是否是简单数据类型
+ if(typeof obj == 'object'){
+  // 复杂数据类型
+  var result = obj.constructor == Array ? [] ： {};
+  for (let i in obj){
+	 result[i] = typeof obj[i] == 'object' ? deepCopy(obj[i]) : obj[i];
+  }	
+ }else{
+  // 简单数据类型 直接 == 赋值
+  var  result = obj;
+ }
+ return result;
 }
 ```
 
 ## 2、手写组合继承(美团，爱奇艺，搜狗)
+
 ```
 // 定义一个动物类
 function Animal (name){
-	// 属性
-	this.name = name || 'Animal';
-	//实例方法
-	this.sleep = function(){
-		console.log(this.name + '正在睡觉! ');
-	}
+ // 属性
+ this.name = name || 'Animal';
+ //实例方法
+ this.sleep = function(){
+  console.log(this.name + '正在睡觉! ');
+ }
 }
 // 原型方法
 Animal.prototype.eat = function(food){
-	console.log(this.name + '正在吃：' + food);
+ console.log(this.name + '正在吃：' + food);
 }
 // 组合继承
 funciton Cat（name）{
-	Animal.call(this);
-	this.name = name || 'Tom';
+ Animal.call(this);
+ this.name = name || 'Tom';
 }
 Cat.prototype = new Animal();
 
 手写一个Promise（爱奇艺，搜狐）
 // promise是一个构造函数，下面是一个简单实例
 var promise = new Promise((resolve,reject)=>{
-	if(操作成功){
-		resolve(value)
-	}else{
-		reject(error)
-	}
+ if(操作成功){
+  resolve(value)
+ }else{
+  reject(error)
+ }
 })
 promise.then(function (value){
-	//success
+ //success
 },function(value){
-	// failure
+ // failure
 })
 ```
 
 ## 3、防抖和节流
 scroll事件本身会触发页面的重新渲染，同时scroll事件的handler又会被高频度的触发，因此事件的handler内部不应该有复杂操作，例如DOM操作就不应该放在事件处理中
 针对此类高频度触发事件的问题(例如页面scroll，屏幕resize, 监听用户输入等), 有两种常用的解决方法，防抖和节流
+
 ### （1）防抖(Debouncing)
 防抖技术既是可以把多个顺序地调用合并成一次，也就是在一定时间内，规定事件会被触发的次数
 通俗一点来说，先看下面这个简化的例子，这个简单的防抖的例子大概功能就是如果500ms 内没有连续触发两次scroll事件，那么才会触发按我们真正想在scroll事件中触发的函数
+
 ```
 // 简单的防抖动函数
 function debounce(func, wait, immediate){
@@ -82,28 +86,28 @@ function realFunc(){
 window.addEventListener('scroll', debounce(realFunc, 500));
 // 没采用防抖动
 window.addEventListener('scroll', realFunc)
-
 // 完整的防抖动函数：
 function debounce(func, wait, immediate){
-	var timeout;
-	return function(){
-		var context = this, args = arguments;
-		var later = function(){
-			timeout = null;
-			if(!immediate) func.apply(context, args);
-		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout)
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	}
+ var timeout;
+ return function(){
+  var context = this, args = arguments;
+  var later = function(){
+   timeout = null;
+   if(!immediate) func.apply(context, args);
+  };
+  var callNow = immediate && !timeout;
+  clearTimeout(timeout)
+  timeout = setTimeout(later, wait);
+  if (callNow) func.apply(context, args);
+ }
 }
 var myEfficientFn = debounce(funcion(){
-	// 滚动中的真正的操作
+ // 滚动中的真正的操作
 }, 250);
 // 绑定监听
 window.addEventListener('resize', myEfficientFn);
 ```
+
 ### （2）节流（Throttling）
 防抖函数确实不错，但是也存在问题，譬如图片的懒加载，我希望在下滑过程中图片不断的被加载出来，而不是只有当我停止下滑时候，图片才被加载出来。又或者下滑时候的数据的ajax请求加载也是同理。
 这个时候，我们希望即使页面在不断被滚动，但是滚动handler也可以以一定的频率被触发(譬如250ms触发一次), 这类场景，就要用到另一种技巧，称为节流函数(throttling)
@@ -113,28 +117,26 @@ window.addEventListener('resize', myEfficientFn);
 // 简单的节流函数
 ```
 function throttle(func, wait, mustRun){
-	var timeout,
-		startTime = new Date();
-
-	return function(){
-		var context = this,
-			args = arguments,
-			curTime = new Date();
-
-		clearTimeout(timeout);
-		// 如果达到了规定的触发时间间隔，触发handler
-		if(curTime - startTime >= mustRun){
-			func.apply(context, args);
-			startTime = curTime;
-		// 没达到触发间隔，重新设定定时器
-		}else{
-			timeout = setTimeout(func, wait);
-		}
-	}
+ var timeout,
+ startTime = new Date();
+ return function(){
+  var context = this,
+  args = arguments,
+  curTime = new Date();
+  clearTimeout(timeout);
+  // 如果达到了规定的触发时间间隔，触发handler
+  if(curTime - startTime >= mustRun){
+   func.apply(context, args);
+   startTime = curTime;
+  // 没达到触发间隔，重新设定定时器
+  }else{
+   timeout = setTimeout(func, wait);
+  }
+ }
 }
 // 实际想绑定在scroll 事件上的handler
 function realFunc(){
-	console.log('Success');
+ console.log('Success');
 }
 // 采用了节流函数
 window.addEventListener('scroll', throttle(realFunc, 500, 1000))
@@ -144,38 +146,38 @@ window.addEventListener('scroll', throttle(realFunc, 500, 1000))
 ```
 // 简单的事件委托
 function delegateEvent(interfaceEle, selector, type, fn){
-	if(interfaceEle.addEventListener){
-		interfaceEle.addEventListener(type, eventfn);
-	}else{
-		interfaceEle.attachEvent('on'+type, eventfn);
-	}
+ if(interfaceEle.addEventListener){
+  interfaceEle.addEventListener(type, eventfn);
+ }else{
+  interfaceEle.attachEvent('on'+type, eventfn);
+ }
 
-	function eventfn(e){
-		var e = e || window.event;
-		var target = e.target || e.srcElement;
-		if(matchSelector(target, selector)){
-			if(fn){
-				fn.call(target, e)
-			}
-		}
-	}
+ function eventfn(e){
+  var e = e || window.event;
+  var target = e.target || e.srcElement;
+  if(matchSelector(target, selector)){
+   if(fn){
+    fn.call(target, e)
+   }
+  }
+ }
 }
 function matchSelector(ele, selector){
-	// if use id
-	if(selector.charAt(0)==='#'){
-		return ele.id === selector.slice(1);
-	}
-	// if use class
-	if(selector.charAt(0) === '.'){
-		return ('' + ele.className + '').indexof('' + selector.slice(1)+'')!= -1;
-	}
-	// if use tarName
-	return ele.tagName.toLowerCase() === selector.toLowerCase();
+ // if use id
+ if(selector.charAt(0)==='#'){
+  return ele.id === selector.slice(1);
+ }
+ // if use class
+ if(selector.charAt(0) === '.'){
+  return ('' + ele.className + '').indexof('' + selector.slice(1)+'')!= -1;
+ }
+ // if use tarName
+ return ele.tagName.toLowerCase() === selector.toLowerCase();
 }
 // 调用
 var odiv = document.getElementById('oDiv');
 delegateEvent(odiv, 'a', click, function(){
-	alert('1')
+ alert('1')
 })
 ```
 
@@ -211,30 +213,30 @@ if(!Function.prototype.bind){
 ```
 var xmlhttp = null; // 声明一个变量，用来实例化XMLHttpRequest对象
 if(window.XMLHttpRequest){
-	// 新版本的浏览器可以直接创建XMLHttpRequest对象
-	xmlhttp = new XMLHttpRequest(); 
+ // 新版本的浏览器可以直接创建XMLHttpRequest对象
+ xmlhttp = new XMLHttpRequest(); 
 }else if(window.ActiveXObject){
-	//IE5或IE6没有XMLHttpRequest对象，而是用ActiveXObject对象
-	xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); 
+ //IE5或IE6没有XMLHttpRequest对象，而是用ActiveXObject对象
+ xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); 
 }
 if(xmlhttp != null){
-	// 指定响应函数为state_Change
-	xmlhttp.onreadystatechange = state_Change; 
-	// 指定请求,这里要访问在/example/xdom路径下的note.xml文件,true代表使用的是异步请求
-	xmlhttp.open('GET','example/xdom/note.xml',true); 
-	xmlhttp.send(null); // 发送请求
+ // 指定响应函数为state_Change
+ xmlhttp.onreadystatechange = state_Change; 
+ // 指定请求,这里要访问在/example/xdom路径下的note.xml文件,true代表使用的是异步请求
+ xmlhttp.open('GET','example/xdom/note.xml',true); 
+ xmlhttp.send(null); // 发送请求
 }else{
-	alert('Your brower does not support XMLHTTP');
+ alert('Your brower does not support XMLHTTP');
 }
 // 创建具体的响应函数 state_Change
 function state_Change(){
-	if(xmlhttp.readyState==4){
-		if(xmlhttp.status == 200){
-			// 这里写函数具体逻辑
-		}else{
-			alert('Problem retrieving XML data');
-		}
-	}
+ if(xmlhttp.readyState==4){
+  if(xmlhttp.status == 200){
+   // 这里写函数具体逻辑
+  }else{
+   alert('Problem retrieving XML data');
+  }
+ }
 }
 ```
 
@@ -243,11 +245,11 @@ function state_Change(){
 var xhr = new XMLHttpRequest();
 xhr.open('GET', '/api', false);
 xhr.onreadystatechange = function(){
-	if(xhr.readyState == 4){
-		if(xhr.status == 200){
-			alert(xhr.responseText);
-		}
-	}
+ if(xhr.readyState == 4){
+  if(xhr.status == 200){
+   alert(xhr.responseText);
+  }
+ }
 }
 xhr.send(null)
 ```
@@ -285,16 +287,16 @@ xhr.send(null)
 4. listener可以通过store.getState()得到当前状态。如果使用的是React，这时可以触发重新渲染View
 ```
 function listener(){
-	let newState = store.getState();
-	component.setState(newState);
+ let newState = store.getState();
+ component.setState(newState);
 }
 ```
 
 ## 12、移动端适配（1px先画法）（美团酒旅）
 ```
 .navTab{
-	border-bottom：1px solid #eceef0;
-	box-shadow: 0 1px 1px #fff;
+ border-bottom：1px solid #eceef0;
+ box-shadow: 0 1px 1px #fff;
 }
 ```
 一种实现方式：先设置一个1px粗的border-bottom，这个时候在大部分移动设备上会呈现出很粗的先，在使用白色css阴影，并且便宜1px来压住过粗的border-bottom线。
@@ -303,27 +305,27 @@ function listener(){
 ```
 //已知宽高：
 .parent{
-	width: 100%;
-	height: 200px;
-	position: relative;
-	border: 1px solid black;
+ width: 100%;
+ height: 200px;
+ position: relative;
+ border: 1px solid black;
 }
 .child{
-	width:80%;
-	height:100px;
-	position:absolute;
-	left：10%;
-	top: 50%;
-	margin-top: -50px;
-	border: 1px solid black;
+ width:80%;
+ height:100px;
+ position:absolute;
+ left：10%;
+ top: 50%;
+ margin-top: -50px;
+ border: 1px solid black;
 }
 // 未知宽高：
 .div{
-	position: absolute;
-	border: 1px solid #888;
-	left: 50%;
-	top: 50%;
-	transform: translateY(-50%) translateX(-50%)
+ position: absolute;
+ border: 1px solid #888;
+ left: 50%;
+ top: 50%;
+ transform: translateY(-50%) translateX(-50%)
 }
 ```
 
@@ -355,18 +357,19 @@ function listener(){
 "type": "logic",
 "content": "and",
 "left": {
-    "type": "leaf",
-    "content": "=",
-    "left": "ID",
-    "right": "123"
+ "type": "leaf",
+ "content": "=",
+ "left": "ID",
+ "right": "123"
 },
 "right": {
-    "type": "leaf",
-    "content": "~",
-    "left": "Time",
-    "right": "234~"
+  "type": "leaf",
+  "content": "~",
+  "left": "Time",
+  "right": "234~"
 }
 ```
+
 即每个节点都包含type, content, left,right四个属性，其中type, content包含该结点的数据，<br/>
 left和right包含该借点的左右子树节点。而我们关心的数据始终都包含在叶子节点中。<br/>
 父节点的type始终为logic，叶节点的type为leaf或者model，其中model始终有一个右子树节点，他的下面不会有其它节点。<br/>
@@ -417,19 +420,20 @@ function treeToArr(t){
 作为最简单的排序算法之一<br/>
 工作原理：它重复地走访过要排序的数列，一次比较两个元素，如果它们的顺序错误就把它们交换过来。<br/>
 走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。
+
 ```
 function bubbleSort(arr){
-	var len = arr.length;
-	for(var i=0; i<len; i++){
-		for(var j=0; j<len-1-i; j++){
-			if(arr[j]>arr[j+1]){ // 相邻元素两两对比
-				var temp = arr[j+1]; // 元素交换
-				arr[j+1] = arr[j];
-				arr[j] = temp;
-			}
-		}
-	}
-	return arr;
+ var len = arr.length;
+ for(var i=0; i<len; i++){
+  for(var j=0; j<len-1-i; j++){
+   if(arr[j]>arr[j+1]){ // 相邻元素两两对比
+    var temp = arr[j+1]; // 元素交换
+    arr[j+1] = arr[j];
+    arr[j] = temp;
+   }
+  }
+ }
+ return arr;
 }
 ```
 
@@ -438,43 +442,44 @@ function bubbleSort(arr){
 所以用到它的时候，数据规模越小越好。唯一的好处就是不占用额外的内存空间。<br/>
 工作原理：首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，<br/>
 然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
+
 ```
 function selectionSort(arr){
-	var len = arr.length;
-	var minIndex, temp;
-	for(var i=0; i<len-1; i++){
-		minIndex = i;
-		for(var j=i+1; j<len; j++){
-			if(arr[j] < arr[minIndex]){ // 寻找最小的树
-				minIndex = j; // 将最小数的索引保存
-			}
-		}
-		temp = arr[i];
-		arr[i] = arr[minIndex];
-		arr[minIndex] = temp;
-	}
-	return arr;
+ var len = arr.length;
+ var minIndex, temp;
+ for(var i=0; i<len-1; i++){
+  minIndex = i;
+  for(var j=i+1; j<len; j++){
+   if(arr[j] < arr[minIndex]){ // 寻找最小的树
+    minIndex = j; // 将最小数的索引保存
+   }
+  }
+  temp = arr[i];
+  arr[i] = arr[minIndex];
+  arr[minIndex] = temp;
+ }
+ return arr;
 }
 ```
 
 ## 18、插入排序(Insertion Sort)
-插入排序的代码实现虽然没有冒泡排序和选择排序那么简单粗暴，但是它的原理应该是最容易理解的了。<br/>
-工作原理：通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。<br/>
-插入排序在实现上，通常采用in-place排序(即只用到o(1)的额外空间的排序)，因而在从后向前扫描过程中，<br/>
+插入排序的代码实现虽然没有冒泡排序和选择排序那么简单粗暴，但是它的原理应该是最容易理解的了。
+工作原理：通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。
+插入排序在实现上，通常采用in-place排序(即只用到o(1)的额外空间的排序)，因而在从后向前扫描过程中，<
 需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间
 ```
 function insertSort(arr){
-	var len = arr.length;
-	for(i=1; i<len; i++){
-		var key = arr[i];
-		var j = i - 1;
-		while(j>=0 && arr[j]>key){
-			arr[j+1] = arr[j]
-			j--;
-		}
-		arr[j+1] = key;
-	}
-	return arr;
+ var len = arr.length;
+ for(i=1; i<len; i++){
+  var key = arr[i];
+  var j = i - 1;
+  while(j>=0 && arr[j]>key){
+   arr[j+1] = arr[j]
+   j--;
+  }
+  arr[j+1] = key;
+ }
+ return arr;
 }
 ```
 
