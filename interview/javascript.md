@@ -67,6 +67,41 @@ document.addEventListener('click', function(event){
 ```
 
 2. jQuery事件delegate()实现事件委托
-delegate()方法
+delegate()方法为指定的元素（属于被选元素的子元素）添加一个或多个事件处理程序，并规定当这些事件发生时运行的函数。
+格式: `$(selector).delegate(childSelector,event,data,function)`
+
+参数|描述
+----|----
+childSelector|必需，规定要附加事件处理程序的一个或多个子元素
+event|必需，规定附加到元素的一个或多个事件。由空格分隔多个事件值。必须是有效事件。
+data|可选，规定传递到函数的额外数据。
+function|必需，规定当事件发生时运行的函数。
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+</head>
+<body>
+  <ul id="myLinks">
+    <li id="goSomeWhere">Go someWhere</li>
+    <li id="doSomething">Do something</li>
+    <li id="sayHi">Say hi</li>
+  </ul>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("#myLinks").delegate("#goSomeWhere", click, function(){
+        location.href = "http://www.baidu.com";
+      })
+    })
+  </script>
+</body>
+</html>
+```
+
+### 使用事件委托注意事项
+使用“事件委托”时，并不是说把事件委托给的元素越靠近顶层就越好。事件冒泡的过程也需要耗时，越靠近顶层，事件的“事件传播链”越长，也就越耗时。如果DOM嵌套结构很深，事件冒泡通过大量祖先元素会导致性能损失。
 
 
