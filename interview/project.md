@@ -375,3 +375,32 @@ Global.js同上，在程序入口main.js里加入下面代码
 
 3. 使用vuex
 vuex是一个专为vue.js应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组建的状态。因此可以存放着全局量。因为vuex有点繁琐，有点大材小用。
+
+## 7、自定义组件上的v-model（add 2.2.0）
+一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件，但是像单选框、复选框等类型的输入控件可能会将 value 特性用于不同的目的。model 选项可以用来避免这样的冲突：
+
+```
+Vue.component('base-checkbox', {
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+  props: {
+    checked: Boolean
+  },
+  template: `
+    <input
+      type="checkbox"
+      v-bind:checked="checked"
+      v-on:change="$emit('change', $event.target.checked)"
+    >
+  `
+})
+```
+
+现在在这个组件上使用 v-model 的时候：
+`<base-checkbox v-model="lovingVue"></base-checkbox>`
+
+这里的 lovingVue 的值将会传入这个名为 checked 的 prop。同时当 <base-checkbox> 触发一个 change 事件并附带一个新的值的时候，这个 lovingVue 的属性将会被更新。
+
+*注意: 你仍然需要在组件的 props 选项里声明 checked 这个 prop。*
