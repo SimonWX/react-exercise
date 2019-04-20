@@ -232,6 +232,82 @@ loader的options配置项里面还可以放置loader，also plugins
 
 4. 统一管理各个组件公共样式
 
+## 5、vue axios的简单封装及全局调用方式
+* 安装axios `npm install axios --save`
+* 新建一个js文件任意取名，这里是http.js
 
+  ```
+  import axios from 'axios'
+  import { Message } from 'element-ui'; // element库消息提示
+  
+  // 创建axios实例
+  var service = axios.create({
+    baseURL: 'http://www.xx.com/v1/',
+    timeout: 5000,
+    headers: {
+      'content-type': 'application/json',
+      'token': '1f154sgff14a1341ho'
+    }
+  })
+  exprot default {
+    // get请求， 其他类型请求复制粘贴。修改method
+    get(url, param){
+      return new Promise((callback, reject)=>{
+        service({
+          method：'get',
+          url,
+          params: param,
+        }).then(res => {
+          // axios返回的是一个promise对象
+          var res_code = res.status.toString();
+          if(res_code.charAt(0) == 2){
+            callback(res); /// callback在promise执行器内部
+          }else{
+            console.log(res, '异常1')
+          }
+        }).catch(err => {
+          if(!err.response){
+            console.log('请求错误')
+            // Message是element库的组件，可以去掉
+            Message({
+              showClose: true,
+              message: '请求错误',
+              type: 'error'
+            });
+          }else{
+            reject(err.response);
+            console.log(err.response, '异常2')
+          }
+        })
+      })
+    }
+  }
+  ```
 
+  main.js中引入这个文件，做全局使用。prototype属性是js用法，每一个构造函数都有一个属性叫做原型（prototype），默认情况下prototype属性会默认获得一个constructor（构造函数）属性
+
+  ```
+  // 这里是vue的主js入口文件
+  import Vue from 'vue'
+  import App from './App.vue'
+  import http from './http.js' // axios实例化后引入http
+
+  Vue.prototype.http = http // 放入全局
+  new Vue({
+    render: h => h(App)
+  }).$mount('#app')
+  ```
+
+  组件中调用封装的axios方式：
+  
+  ```
+  <script>
+    // 生命周期函数
+    mounted(){
+      this.http.get('banner/1').then(res=>{
+        console.log(res.data)
+      })
+    }
+  </script>
+  ```
 
