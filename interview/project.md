@@ -311,3 +311,67 @@ loader的options配置项里面还可以放置loader，also plugins
   </script>
   ```
 
+## 6、vue--全局变量的几种实现方式
+1. 全局变量专用模块。就是以一个特定模块来组织管理这些全局量，需要引用的地方导入该模块就好了。全局变量专用模块Global.vue
+    
+    ```
+    <script>
+      const colorList = [
+        '#999999',
+        '#666666',
+        '#333333'
+      ]
+      const colorListLength = 20
+      function getRandColor(){
+        var tem = Math.round(Math.random()* colorListLength)
+        return colorList[tem]
+      }
+      export default{
+        colorList,
+        colorListLength,
+        getRandColor
+      }
+    </script>
+    ```
+
+    模块里的变量用出口暴露出去，当其他地方需要使用时，引入模块就行。
+    
+    ```
+    // 在其他组件中使用它
+    <script type="text/javascript">
+      import global_ from 'components/tool/Global'
+      export default {
+        data (){
+          return {
+            getColor: global_.getRandColor,
+          }
+        }
+      }
+    </script>
+    ```
+
+2. 全局变量模块挂载到Vue.prototype里。
+Global.js同上，在程序入口main.js里加入下面代码
+
+    ```
+    import global_ from './components/tool/Global'
+    Vue.prototype.GLOBAL = global_
+    ```
+
+    挂载之后，在需要引用全局变量的模块处，不需再导入全局量模块，直接用这个就可以引用，如下：
+    
+    ```
+    // 在其他组件中使用它
+    <script>
+      export default {
+        data () {
+          return{
+            getColor: this.GLOBAL.getRandColor,
+          }
+        }
+      }
+    </script>
+    ```
+
+3. 使用vuex
+vuex是一个专为vue.js应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组建的状态。因此可以存放着全局量。因为vuex有点繁琐，有点大材小用。
