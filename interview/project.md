@@ -48,7 +48,7 @@
 8. README.md：项目的说明文档，markdown格式
 9. .xxxx文件：这些是一些配置文件，包括语法配置，git配置等。
 
-### 四、vue项目webpack配置
+## 2、vue项目webpack配置
 1. 配置热更新&自动打开浏览器
     * 方法一：修改package.json文件
 
@@ -68,7 +68,7 @@
     * 去掉map文件的方法：在config/index.js中修改配置：productionSourceMap: false
     ![Image text](https://img-blog.csdn.net/20181009105822808?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hpYW9tYWppYTAyOQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 
-五、webpack的核心概念包含以下几个：
+## 3、webpack的核心概念包含以下几个：
 * entry - webpack打包的入口，并非代码执行的入口
 * output - webpack打包后生成的静态资源文件，它是最终会被html引用的文件
 * loader - 对于非js的模块（或说文件），转化成webpack能够处理的js文件，对于还要进一步处理的js文件进行加工处理。
@@ -166,7 +166,7 @@ loader的options配置项里面还可以放置loader，also plugins
 * postcss相关的：postcss-plugin-px2rem，postcss-preset-env，postcss-sprites，autoprefixer
 * webpack自带的方法：webpack.ProvidePlugin等
 
-六、封装vue组件
+## 4、封装vue组件
 想要封装好一个组件，一定要熟练掌握这三个技能。
  * 父组件-子组件传值（props）
  * 子组件-父组件传值（$emit）
