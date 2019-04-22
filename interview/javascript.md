@@ -104,6 +104,58 @@ function|必需，规定当事件发生时运行的函数。
 ### 使用事件委托注意事项
 使用“事件委托”时，并不是说把事件委托给的元素越靠近顶层就越好。事件冒泡的过程也需要耗时，越靠近顶层，事件的“事件传播链”越长，也就越耗时。如果DOM嵌套结构很深，事件冒泡通过大量祖先元素会导致性能损失。
 
+## 2、面试题汇集
+1. 题目一
+    
+    ```
+    var a = 1;
+    function foo(a){
+      a = 2
+      console.log('inner:', a) // 2
+    }
+    foo(a)
+    console.log('out:', b) // 1
+    ```
 
+2. 题目二
+    
+    ```
+    var a = 1;
+    function func(a, b){
+      console.log(arguments) // Arguments [1, callee: f, Symbol(Symbol.iterator): f]
+      a = 2;
+      arguments[0] = 3;
+      arguments[1] = 4;
+      var a;
+      console.log(a, this.a, b) // 3  1  undefined
+    }
+    func(a)
+    ```
+
+3. 题目三
+
+    ```
+    // function  中 return this 是代表什么？
+    String.prototype.self = function(){ return this }
+    var a = 'str';
+    var b = a.self();
+    console.log(a); // 'str'
+    
+    console.log(b); String {'str'}
+    
+    // valueOf() 方法返回一个String对象的原始值(primitive value)，该值等同于String.prototype.toString()
+    
+    console.log(a === b, a.vulueOf() === b.valueOf(), typeof a, typeof b) 
+    // false true 'string' 'object'
+
+    console.log('str' === new String('str')) // false
+
+    console.log('str' === ['s', 't', 'r'].join('').toString()) //true
+
+    console.log(String('str') === 'str') // true
+
+    console.log(String('str') === new String('str')) // false
+
+    ```
 
 
