@@ -136,6 +136,8 @@ function|必需，规定当事件发生时运行的函数。
 
     ```
     // function  中 return this 是代表什么？
+    // 如果return的是Object。这种情况下，不再返回this对象，而是返回return语句的返回值。
+
     String.prototype.self = function(){ return this }
     var a = 'str';
     var b = a.self();
@@ -158,4 +160,41 @@ function|必需，规定当事件发生时运行的函数。
 
     ```
 
+4. 题目四
+    
+    ```
+    function a(){
+      console.log(1)
+    }
+    var foo = function(){
+      return new Promise(function(resolve, reject){
+        resolve(2)
+        console.log(3)
+      })
+    }
+    a()
+    foo().then(function(data){
+      console.log(data);
+      console.log(4)
+    })
+    setTimeout(function(){
+      console.log(5)
+    }, 0)
+    // 结果 :
+    // 1
+    // 3
+    // 2
+    // 4
+    // 5
+    ```
 
+5. 题目五
+    ```
+    console.log(!'') // true
+    console.log(!{}) // false
+    console.log(![]) // false
+    console.log(!0) // true
+    console.log(!1) // false
+    console.log(!null) // true
+    console.log(!undefined) // true
+    ```
