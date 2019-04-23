@@ -429,7 +429,9 @@ function|必需，规定当事件发生时运行的函数。
     解释：process.nextTick 和 promise.then 都属于 microtask，而 setImmediate 属于 macrotask，在事件循环的 check 阶段执行。
     事件循环的每个阶段（macrotask）之间都会执行 microtask，事件循环的开始会先执行一次 microtask。
 
+
 ## 3、面试题
+https://www.jianshu.com/p/d50015adad69
 1.  (a). 给出下面代码的输出结果
     ```
     function createFunctions(){
@@ -504,6 +506,22 @@ function|必需，规定当事件发生时运行的函数。
       inner();
     }
     outer();
+    // 结果：
+    // NaN
+    // 3
+    ```
+
+    上述inner()函数相当于
+
+    ```
+    function inner () {
+    //变量提升
+      var b; // b is undefined
+      b++; // b is NaN
+      console.log(b);
+      b = 3; // b is 3
+      console.log(b); // output "3"
+    }
     ```
 
 3. 请给出下面代码输出结果
@@ -527,7 +545,7 @@ function|必需，规定当事件发生时运行的函数。
     ```
     (function (){
       try {
-
+        throw new Error();
       } catch (x){
         var x = 1, y = 2;
         console.log(x);
@@ -535,6 +553,28 @@ function|必需，规定当事件发生时运行的函数。
       console.log(x);
       console.log(y);
     })()
+    // 输出:
+    // 1
+    // undefined
+    // 2
+    ```
+    
+    解析：var语句被提升（没有它们的值初始化）到它所属的全局或函数作用域的顶部，
+    即使它位于with或catch块内。但是，错误的标识符只在catch块内部可见。它相当于：
+    
+    ```
+    (function(){
+      var x, y; // outer and hoisted
+      try {
+        throw new Error();
+      } catch (x){ // inner
+        x = 1; // inner x, not the outer one
+        y = 2; // there is only one y, which is in the outer scope
+        console.log(x) //inner
+      }
+      console.log(x);
+      console.log(y);
+    })();
     ```
 
 5. 请给出下面代码输出结果
