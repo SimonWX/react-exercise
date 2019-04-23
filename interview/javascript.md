@@ -428,3 +428,132 @@ function|必需，规定当事件发生时运行的函数。
 
     解释：process.nextTick 和 promise.then 都属于 microtask，而 setImmediate 属于 macrotask，在事件循环的 check 阶段执行。
     事件循环的每个阶段（macrotask）之间都会执行 microtask，事件循环的开始会先执行一次 microtask。
+
+## 3、面试题
+1.  (a). 给出下面代码的输出结果
+    ```
+    function createFunctions(){
+      var result = [];
+      for(var i = 0; i < 10; i++){
+        result[i] = function(){
+          return i;
+        }
+      }
+      return result;
+    }
+    var result = createFunctions();
+    console.log(result[5]());
+    // 结果 ： 10
+    ```
+    
+    (b).上述输出结果是否达到预期结果，如果不是，有什么改进?
+    
+    ```
+    // 改进（1）：
+    function createFunctions(){
+      var result = [];
+      for(var i = 0; i < 10; i++){
+        result[i] = (function(num){
+          return num;
+        })(i)
+      }
+      return result;
+    }
+    var result = createFunctions();
+    console.log(result[5]) //输出结果：5
+    /**
+    解析：改进前的，i永远都是那个i(相当于一个指针)，存在result数组里面的值其实就是指针i，
+    指向的那个具体的值也是同一个，随着循环不断在变化，循环完成，值固定了（等10），
+    数组里装的值也就定下来了(全部是10)
+    改进后：借用立即执行函数，(function(){})(i)，立即执行函数是把i作为参数传到函数里面。
+    好处是：参数按值传递，这样函数获得的i就不是一个指针了，而是i的一个副本。
+    那么，数组里面的各个值(函数执行后返回的值)就毫无瓜葛。
+    */
+
+    // 改进(2):
+		function createFunctions(){
+			var result = [];
+			for(var i = 0; i < 10; i++){
+				result[i] = (function(num){
+					return function(){return num};
+				})(i)
+			}
+			return result;
+		}
+		var result = createFunctions();
+		console.log(result[5]()) //输出结果：5
+    /**
+    解析：改进(1)中，立即执行函数是return num，可直接得到数组中num值，
+    后面的return function(){return num}, 返回的是一个函数，数组中的存的也是函数，
+    获取值时候要调用数组中的函数以得到函数的值
+    */
+    ```
+
+2. 请给出下面代码输出结果
+    
+    ```
+    var b = 1;
+    function outer(){
+      var b = 2;
+      function inner(){
+        b++;
+        console.log(b);
+        var b = 3;
+        console.log(b);
+      }
+      inner();
+    }
+    outer();
+    ```
+
+3. 请给出下面代码输出结果
+  
+    ```
+    var name = 'name1';
+    var object = {
+      name: 'object name',
+      getName: function(){
+        return function(){
+          return this.name;
+        }
+      }
+    }
+    console.log(object.getName()());
+    上述输出结果是否达到预期结果，如果不是，有什么改进方法
+    ```
+
+4. 请给出下面代码输出结果
+    
+    ```
+    (function (){
+      try {
+
+      } catch (x){
+        var x = 1, y = 2;
+        console.log(x);
+      }
+      console.log(x);
+      console.log(y);
+    })()
+    ```
+
+5. 请给出下面代码输出结果
+    
+    ```
+    console.log(`0 || 1 = ${(0 || 1)}`);
+    console.log(`1 || 2 = ${(1 || 2)}`);
+    console.log(`0 && 1 = ${(0 && 1)}`);
+    console.log(`1 && 2 = ${(1 && 2)}`);
+    console.log(false == '0');
+    console.log(false === '0');
+    console.log(1 < 2 < 3);
+    console.log(3 > 2 > 1);
+    ```
+
+6. 按照要求实现Person和Student对象
+    * a. student继承Person
+    * b. Person包含一个实例变量name，包含一个方法printName
+    * c. Student包含一个实例变量score，包含一个实例方法printScore
+    * d. 所有Person和Student对象之间共享一个方法
+
+7. 整数数组，数组中连续的一个或者多个整数组成一个子数组，每个子数组都有一个和，求所有子数组的和的最大值，例 [1,-2,3,10,-4,7,2,-5]，最大的子数组为[3,10,-4,7,2]，那么输出的该子数组的和是18，尽量考虑时间复杂度
