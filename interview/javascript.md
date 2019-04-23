@@ -537,6 +537,7 @@ https://www.jianshu.com/p/d50015adad69
       }
     }
     console.log(object.getName()());
+    // 结果：name1
     上述输出结果是否达到预期结果，如果不是，有什么改进方法
     ```
 
@@ -580,14 +581,14 @@ https://www.jianshu.com/p/d50015adad69
 5. 请给出下面代码输出结果
     
     ```
-    console.log(`0 || 1 = ${(0 || 1)}`);
-    console.log(`1 || 2 = ${(1 || 2)}`);
-    console.log(`0 && 1 = ${(0 && 1)}`);
-    console.log(`1 && 2 = ${(1 && 2)}`);
-    console.log(false == '0');
-    console.log(false === '0');
-    console.log(1 < 2 < 3);
-    console.log(3 > 2 > 1);
+    console.log(`0 || 1 = ${(0 || 1)}`); // 0 || 1 = 1
+    console.log(`1 || 2 = ${(1 || 2)}`); // 1 || 2 = 1
+    console.log(`0 && 1 = ${(0 && 1)}`); // 0 && 1 = 0
+    console.log(`1 && 2 = ${(1 && 2)}`); // 1 && 2 = 2
+    console.log(false == '0'); // true
+    console.log(false === '0'); // false
+    console.log(1 < 2 < 3); // true
+    console.log(3 > 2 > 1); // true
     ```
 
 6. 按照要求实现Person和Student对象
@@ -595,5 +596,51 @@ https://www.jianshu.com/p/d50015adad69
     * b. Person包含一个实例变量name，包含一个方法printName
     * c. Student包含一个实例变量score，包含一个实例方法printScore
     * d. 所有Person和Student对象之间共享一个方法
+    
+    ```
+    function Person(name){
+      this.name=name||'Person';
+      this.printName = function(){
+        document.write(name)
+      };
+    }
+    Person.prototype.sayname=function () {
+      alert(this.name);
+    }
+    function Student(name,score) {
+      Person.call(this,name);
+      this.score = score;
+    }
+    Student.prototype=new Person;
+    Student.prototype.printScore=function () {
+        document.write(this.score)
+    }
+    var xiaoMing=new Student("xiaoMing",23);
+    xiaoMing.sayname();
+    xiaoMing.printScore();
+    ```
 
-7. 整数数组，数组中连续的一个或者多个整数组成一个子数组，每个子数组都有一个和，求所有子数组的和的最大值，例 [1,-2,3,10,-4,7,2,-5]，最大的子数组为[3,10,-4,7,2]，那么输出的该子数组的和是18，尽量考虑时间复杂度
+
+7. 整数数组，数组中连续的一个或者多个整数组成一个子数组，每个子数组都有一个和，求所有子数组的和的最大值，
+例 [1,-2,3,10,-4,7,2,-5]，最大的子数组为[3,10,-4,7,2]，那么输出的该子数组的和是18，尽量考虑时间复杂度
+    
+    思路：
+    * 遍历数组，遇到负的和则放弃之前的结果，重新积累，这期间保留最大值；
+    * 用sum记录最终返回的最大和，用tempsum记录累计值；
+    * 对于数组中的一个数array[i]，若其左边的累加和非负,那么加上array[i]；
+    * 判断此时的tempsum是否大于sum，若大于此时的sum，则用sum记录下来。
+
+    echoVic 链接：https://www.jianshu.com/p/9ed5fa86361e
+
+    ```
+    function FindGreatestSumOfSubArray(array) {
+      if (array.length < 0) return 0;
+      var sum = array[0],
+        tempsum = array[0]; //注意初始值 不能设为0 防止只有负数        
+      for (var i = 1; i < array.length; i++) {
+        tempsum = (tempsum < 0) ? array[i] : tempsum + array[i];
+        sum = (tempsum > sum) ? tempsum : sum;
+      }
+      return sum;
+    }
+    ```
