@@ -644,3 +644,54 @@ https://www.jianshu.com/p/d50015adad69
       return sum;
     }
     ```
+
+## 3、集锦
+1. 写出如下代码运行结果：
+    ```
+    function C1(name){
+      if(name) this.name = name;
+    }
+    function C2(name){
+      this.name = name;
+    }
+    function C3(name){
+      this.name = name || 'John'
+    }
+    C1.prototype.name = 'Tom';
+    C2.prototype.name = 'Tom';
+    C3.prototype.name = 'Tom';
+    alert(
+      (new C1()).name + (new C2()).name + (new C3()).name
+    )
+    // 结果： TomundefinedJohn
+    // 解析：C1,if不成立，new C1()中没有name属性，就访问到了原型上的name，输出tom
+    C2,既然没有参数，也就是执行new C2(undefined)，所以name为undefined
+    C3,new C3()的name值为john，所输出john
+    ```
+  
+2. 写出如下代码运行结果
+    
+    ```
+    window.number = 1;
+    var obj = {
+      'number': 4,
+      'dbl': (function(){
+        this.number *= 2;
+        return function(){
+          this.number *= 2;
+        }
+      })()
+    }
+    var dbl = obj.dbl;
+    dbl();
+    obj.dbl();
+    console.log(window.number+obj.number)
+    // 结果 ： 12
+    // 解析：关键是this的指向问题，在 this 有所属对象时就指向所属对象，
+    没有所属对象就指向全局对象。全局作用域 number 、 obj
+    局部作用域 obj.nujber 、 obj.dbl。obj.dbl 为立即执行函数
+    window.number = 1 * 2 = 2
+    执行结果为一个匿名函数
+    ```
+
+3. 
