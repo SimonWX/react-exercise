@@ -2350,8 +2350,189 @@ function deepCopy(p, c){
 13. 使用箭头函数(arrow functions)的优点是什么
 	1. 作用域安全：在箭头函数之前，每一个新创建的函数都有定义自身的 this 值(在构造函数中是新对象；在严格模式下，函数调用中的 this 是未定义的；如果函数被称为“对象方法”，则为基础对象等)，但箭头函数不会，它会使用封闭执行上下文的 this 值。
 	2. 简单：箭头函数易于阅读和书写
-	3. 清晰：当一切都是一个箭头函数，任何常规函数都可以立即用于定义作用域。开发者总是可以查找 next-higher 函数语句，以查看 this 的值
+	3. 清晰：当一切都是一个箭头函数，任何常规函数都可以立即用于定义作用域。开发者总是可以查找 next-higher 函数语句，以查看 this 的值.
 
+## 61、爱奇艺面试
+1. JavaScript 基本数据类型？
+	答：基本数据类型（简单数据类型）：String、Number、Null、Undefined、Boolean、
+	复杂数据类型（复杂数据类型）：Object。（Object、Array、Function属于引用类型）
+
+2. 类型判断
+	
+	```
+	console.log(null == undefined) // true
+	console.log(null === undefined) // false
+	console.log(typeof(new Object()) == typeof(null)) // true
+	console.log(new Number('1') == 1) // true
+	console.log(new Number('1') === 1) // false
+	console.log(new Object('1') == 1) // true
+	console.log(new Object('1') === 1) // false
+	console.log(new Boolean() == false) // true
+	console.log(new Boolean() === true) // false
+	```
+
+3. 说出下面代码输出结果
+	
+	```
+	var a = 1
+	if(true){
+	 console.log(a) //  1
+	 var a = 2
+	 var b = 3
+	 console.log(b) //  3
+	}
+	console.log(a) //  2
+	console.log(b) //  3
+	b = 4
+	```
+
+4. 说出下面代码输出结果
+
+	```
+	var a = 1
+	function a () {}
+	console.log(a) // 1 (number)
+	```
+
+5. 说出下面代码输出结果
+
+	```
+	var a = 1
+	function fun(a, b) {
+	  a = 2
+	  arguments[0] = 3
+	  arguments[1] = 1
+	  return a + b
+	}
+	console.log(fun(0, 0)) // 4
+	console.log(a) // 1
+	```
+
+6. 说出下面代码的输出结果
+
+	```
+	for (var i = 0; i < 5; i++) {
+	  setTimeout(function() {
+	    console.log('loop:',i) 
+	  }, 0)
+	}
+	console.log('res:',i) 
+
+	输出结果：
+	res： 5
+	loop：5（打印5次）
+	```
+
+7. 说出下面代码输出结果
+
+	```
+	function A() {
+	  this.num1 = 1
+	}
+	A.prototype.num2 = 2
+	function B() {
+	  this.num1 = 3
+	}
+	B.prototype = new A()
+	var b1 = new B()
+	console.log(b1.num1) // 3
+	console.log(b1.num2) // 2
+	var b2 = B()
+	console.log(b2.num1) // Uncaught TypeError
+	console.log(b2.num2) // Uncaught TypeError
+	```
+
+8. 如何保证的 Socket 实时通信的稳定性？
+	* websocket是前后端交互的长连接，前后端也都可能因为一些情况导致连接失效并且相互之间没有反馈提醒。因此为了保证连接的可持续性和稳定性，websocket心跳重连就应运而生。
+	* 在使用原生websocket的时候，如果设备网络断开，不会触发websocket的任何事件函数，前端程序无法得知当前连接已经断开。这个时候如果调用websocket.send方法，浏览器就会发现消息发不出去，便会立刻或者一定短时间后（不同浏览器或者浏览器版本可能表现不同）触发onclose函数。
+	* 后端websocket服务也可能出现异常，连接断开后前端也并没有收到通知，因此需要前端定时发送心跳消息ping，后端收到ping类型的消息，立马返回pong消息，告知前端连接正常。如果一定时间没收到pong消息，就说明连接不正常，前端便会执行重连。
+	* 为了解决以上两个问题，以前端作为主动方，定时发送ping消息，用于检测网络和前后端连接问题。一旦发现异常，前端持续执行重连逻辑，直到重连成功。
+	* 如果希望websocket连接一直保持，我们会在close或者error上绑定重新连接方法。这样一般正常情况下失去连接时，触发onclose方法，我们就能执行重连了。
+	
+	```
+	ws.onclose = function () {
+		reconnect();
+	};
+	ws.onerror = function () {
+		reconnect();
+	};
+	```
+
+	那么针对断网的情况的心跳重连，怎么实现呢。
+	
+	```
+    var heartCheck = {
+      timeout: 60000,//60ms
+      timeoutObj: null,
+      serverTimeoutObj: null,
+      reset: function(){
+          clearTimeout(this.timeoutObj);
+          clearTimeout(this.serverTimeoutObj);
+          this.start();
+      },
+      start: function(){
+        var self = this;
+        this.timeoutObj = setTimeout(function(){
+          ws.send("HeartBeat");
+          self.serverTimeoutObj = setTimeout(function(){
+            ws.close();
+            //如果onclose会执行reconnect，我们执行ws.close()就行了.
+            //如果直接执行reconnect 会触发onclose导致重连两次	
+          }, self.timeout)
+        }, this.timeout)
+      },
+	  }
+
+    ws.onopen = function () {
+    heartCheck.start();
+    };
+    ws.onmessage = function (event) {
+      heartCheck.reset();
+    }
+    ws.onclose = function () {
+      reconnect();
+    };
+    ws.onerror = function () {
+      reconnect();
+    };
+	```
+
+	如上代码，heartCheck 的 reset和start方法主要用来控制心跳的定时。
+
+	#### 什么条件下执行心跳：
+	* 当onopen也就是连接上时，我们便开始start计时，如果在定时时间范围内，onmessage获取到了后端的消息，我们就重置倒计时，
+	* 距离上次从后端获取到消息超过60秒之后，执行心跳检测，看是不是断连了，这个检测时间可以自己根据自身情况设定。
+
+	#### 判断前端ws断开(断网但不限于断网的情况）：
+	* 当心跳检测send方法执行之后，如果当前websocket是断开状态(或者说断网了)，发送超时之后，浏览器的ws会自动触发onclose方法，重连也执行了（onclose方法体绑定了重连事件），如果当前一直是断网状态，重连会2秒（时间是自己代码设置的）执行一次直到网络正常后连接成功。
+	* 如此一来，我们判断前端主动断开ws的心跳检测就实现了。为什么说是前端主动断开，因为当前这种情况主要是通过前端ws的事件来判断的，后面说后端主动断开的情况。
+
+	#### 判断后端断开：
+	* 如果后端因为一些情况断开了ws，是可控情况下的话，会下发一个断连的消息通知，之后才会断开，我们便会重连。
+	* 如果因为一些异常断开了连接，我们是不会感应到的，所以如果我们发送了心跳一定时间之后，后端既没有返回心跳响应消息，前端又没有收到任何其他消息的话，我们就能断定后端主动断开了。
+	* 一点特别重要的发送心跳到后端，后端收到消息之后必须返回消息，否则超过60秒之后会判定后端主动断开了。
+
+  因为目前我们这种方式会一直重连如果没连接上或者断连的话，如果有两个设备同时登陆并且会踢另一端下线，一定要发送一个踢下线的消息类型，这边接收到这种类型的消息，逻辑判断后就不再执行reconnect，否则会出现一只相互挤下线的死循环。
+
+9. TCP/IP五层模型的协议
+    * 应用层 : 是最靠近用户的OSI层。这一层为用户的应用程序（例如电子邮件、文件传输和终端仿真）提供网络服务。
+    * 传输层 （四层交换机、也有工作在四层的路由器）: 定义了一些传输数据的协议和端口号（WWW端口80等），如： 
+    TCP（transmission control protocol –传输控制协议，传输效率低，可靠性强，用于传输可靠性要求高，数据量大的数据） 
+    UDP（user datagram protocol–用户数据报协议，与TCP特性恰恰相反，用于传输可靠性要求不高，数据量小的数据，如QQ聊天数据就是通过这种方式传输的）。 主要是将从下层接收的数据进行分段和传输，到达目的地址后再进行重组。常常把这一层数据叫做段。 　　
+    * 网络层 （路由器、三层交换机）: 在位于不同地理位置的网络中的两个主机系统之间提供连接和路径选择。Internet的发展使得从世界各站点访问信息的用户数大大增加，而网络层正是管理这种连接的层。 
+    * 数据链路层 : 定义了如何让格式化数据以进行传输，以及如何让控制对物理介质的访问。这一层通常还提供错误检测和纠正，以确保数据的可靠传输。 　
+    * 物理层 : 主要定义物理设备标准，如网线的接口类型、光纤的接口类型、各种传输介质的传输速率等。它的主要作用是传输比特流（就是由1、0转化为电流强弱来进行传输,到达目的地后在转化为1、0，也就是我们常说的数模转换与模数转换）。这一层的数据叫做比特（中继器、集线器、还有我们通常说的双绞线也工作在物理层）
+    
+    * 会话层：通过运输层（端口号：传输端口与接收端口）建立数据传输的通路。主要在你的系统之间发起会话或者接受会话请求（设备之间需要互相认识可以是IP也可以是MAC或者是主机名） 　　
+    * 表示层：可确保一个系统的应用层所发送的信息可以被另一个系统的应用层读取。例如，PC程序与另一台计算机进行通信，其中一台计算机使用扩展二一十进制交换码（EBCDIC），而另一台则使用美国信息交换标准码（ASCII）来表示相同的字符。如有必要，表示层会通过使用一种通格式来实现多种数据格式之间的转换。
+     　　
+    
+    五层协议只是OSI和TCP/IP的综合，实际应用还是TCP/IP的四层结构。为了方便可以把下两层称为网络接口层。
+    三种模型结构：
+    
+    ![Image text](https://img-blog.csdn.net/20170822222325781?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvU2lsZW5jZU9P/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+    ![Image text](https://img-blog.csdn.net/20170822224933262?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvU2lsZW5jZU9P/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 
 

@@ -645,7 +645,7 @@ https://www.jianshu.com/p/d50015adad69
     }
     ```
 
-## 3、集锦
+## 4、集锦
 1. 写出如下代码运行结果：
     ```
     function C1(name){
