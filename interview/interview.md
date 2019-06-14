@@ -2602,11 +2602,59 @@ function deepCopy(p, c){
     减少唯一主机名的数量会潜在减少页面中并行下载的数量（HTTP 1.1规范建议从每个主机名并行下载两个组件，但实际上可以多个），这样减少主机名和并行下载的方案会产生矛盾，需要大家自己权衡。建议将组件放到至少两个但不多于4个主机名下，减少DNS查找的同时也允许高度并行下载。
 
 
+## 62、浏览器缓存、web性能优化
+浏览器缓存机制设置众多，html5 appcache，Expires， Last-Modified/If-Modified-Since， Etag/If-None-Match， max-age=0/no-cache。
+浏览器缓存总流程图：
+对http请求来说,客户端缓存分为三类：
+* 不发送任何请求，直接从缓存中取数据，代表的特性有，Expires, Cache-Control=<number !=0> 和appcache
+* 发送请求确认是否新鲜，再决定是否返回304并且从缓存中取数据，代表特性有：Last-Modified/If-Modified-Since，Etag/If-None-Match
+* 直接发送请求，没有缓存，代表的特性有: Cache-Control: max-age=0/no-cache
 
+![Image text](https://raw.githubusercontent.com/etoah/BrowserCachePolicy/master/assets/finalized.png)
 
+## 63、常用标准请求头字段
+1. Accept 设置接受的内容类型  `Accept: text/plain`
+2. Accept-Charset 设置接受的字符编码 `Accept-Charset: utf-8`
+3. Accept-Encoding 设置接受的编码格式 `Accept-Encoding: gzip, deflate`
+4. Accept-Datetime 设置接受的版本时间 `Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT`
+5. Accept-Language 设置接受的语言 `Accept-Language: en-US`
+6. Authorization 设置HTTP身份验证的凭证 `Authorization: Basic QWxhzZGRpbjpvcGVuIHNIc2FtZQ==`
+7. Cache-Control 设置请求响应链上所有的缓存机制必须遵守的指令 `Cache-Control: no-cache`
+8. Connection 设置当前连接和hop-by-hop协议请求字段列表的控制选项
+	
+	```
+	Connection: keep-alive
+	Connection: Upgrade
+	```
 
+9. Content-Length 设置请求体的字节长度 `Content-Length: 348`
+10. Content-MD5 设置基于MD5算法对请求体内容进行Base64二进制编码
+	`Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==`
+11. Content-Type 设置请求体的MIME类型(适用POST和PUT请求)
+	`Content-Type: application/x-www-form-urlencoded`
+12. Cookie 设置服务器适用Set-Cookie发送的http cookie
+	`Cookie: $Version=1; Skin=new;`
+13. Date 设置消息发送的日期和时间
+	`Date: Tue, 15 Nov 1994 08:12:31 GMT`
+14. Expect 表示客户端需要的特殊浏览器行为：
+	`Expect: 100-continue`
+15. Forwarded 披露客户端通过http代理链接web服务的源消息
+	
+	```
+	Forwarded: for=192.0.2.60;proto=http;by=203.0.113.43
+	Forwarded: for=192.0.2.43,for=198.51.100.17
+	```
+16. From 设置发送请求的用户的email地址
+	`Form: user@example.com`
+17. Host 设置服务器域名和tcp端口号，如果使用的是服务请求标准端口号，端口号可以省略
+	```
+	Host: en.wikipedia.org:8080
+	Host: en.wikipedia.org
+	```
+18. If-Match 设置客户端的ETag，当时客户端Etag和服务器生成的Etag一致才执行，适用于更新自从上次更新之后没有改变的资源
+`If-Match: '737060cd8c284d8af7ad3082f209582d'`
 
-
+19. If-Modified-Since 设置更新时间，从更新时间到服务端
 
 
 
