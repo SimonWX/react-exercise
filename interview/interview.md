@@ -1,7 +1,7 @@
 # *Interview Collection For FE/JavaScript*
 
 ## 1、手写一个js的深克隆 （美团，爱奇艺）
-
+test
 ```
 function deepCopy(obj){
  // 判断是否是简单数据类型
